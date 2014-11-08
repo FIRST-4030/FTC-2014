@@ -3,16 +3,15 @@
 #pragma config(Sensor, S1,     motors,         sensorI2CMuxController)
 #pragma config(Sensor, S2,     SMUX,           sensorI2CCustom9V)
 #pragma config(Sensor, S3,     servos,         sensorI2CMuxController)
-#pragma config(Sensor, S4,     gyroSensor,     sensorI2CHiTechnicGyro)
 #pragma config(Motor,  motorA,           ,             tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  motorB,           ,             tmotorNXT, openLoop, reversed, encoder)
 #pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C1_1,     leftFrontMotor, tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C1_1,     leftFrontMotor, tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     leftRearMotor, tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C2_1,     rightFrontMotor, tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C2_2,     rightRearMotor, tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C2_1,     rightFrontMotor, tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C2_2,     rightRearMotor, tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C3_1,     spinnerMotor,  tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C3_2,     liftMotor,     tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_2,     liftMotor,     tmotorTetrix, openLoop, encoder)
 #pragma config(Servo,  srvo_S3_C1_1,    goalHook,             tServoStandard)
 #pragma config(Servo,  srvo_S3_C1_2,    hopperTilt,           tServoStandard)
 #pragma config(Servo,  srvo_S3_C1_3,    unusedS3C13,          tServoStandard)
@@ -31,7 +30,6 @@ task main()
 
   StartTask(DriveMec);
 
-  int threshold = 10;
 	while(true)
 	{
 		getJoystickSettings(joystick);
@@ -58,6 +56,7 @@ task main()
 		} else if(joystick.joy2_TopHat == 4) {
 			SetHopperServo(HOPPER_MAX);
 		}
+
 
 	}
 }

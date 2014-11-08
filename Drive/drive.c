@@ -5,6 +5,9 @@
 #define WHEEL_MAX (100)
 #define SPINNER_IN (100)
 #define SPINNER_OUT (-50)
+#define LIFT_UP (100)
+#define LIFT_DOWNF (100)
+#define LIFT_DOWNS (75)
 
 //Driving Method for Wheels, Called Directly in Tele-Op
 //The params are naturally the joysticks, thus named after their axis
@@ -51,6 +54,11 @@ void DriveSpinnerMotor(int power)
 	motor[spinnerMotor] = power;
 }
 
+void DriveLiftMotor(int power)
+{
+	motor[liftMotor] = power;
+}
+
 //Stopping Motors
 
 //Stopping wheels with this method is only necessary in auto
@@ -60,6 +68,10 @@ void StopWheelMotors() {
 
 void StopSpinnerMotor() {
 	DriveSpinnerMotor(0);
+}
+
+void StopLiftMotor() {
+	DriveLiftMotor(0);
 }
 
 #endif

@@ -44,5 +44,14 @@ int readDriveEncoder() {
 	return nMotorEncoder[driveRightRear];
 }
 
+//Encoder methods for lift motor
+void resetLiftEncoder() {
+	nMotorEncoder[liftMotor] = 0;
+}
+
+int readLiftEncoder() {
+	return nMotorEncoder[liftMotor];
+}
+
 
 #endif

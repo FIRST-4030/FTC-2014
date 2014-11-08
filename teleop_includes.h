@@ -2,7 +2,11 @@
 #define FTC_TELEOP_INCLUDES
 
 ///// Sensor Multiplexer Interface /////
-//Need to be done//
+#include "drivers/hitechnic-sensormux.h"
+const tMUXSensor gyroSensor = msensor_S2_1;
+const tMUXSensor IRSeeker = msensor_S2_2;
+const tMUXSensor ksTouch = msensor_S2_3;
+const tMUXSensor lTouch = msensor_S2_4;
 
 // Teleop Includes
 #include "JoystickDriver.c"
