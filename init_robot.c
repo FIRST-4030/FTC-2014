@@ -4,6 +4,8 @@
 ///// INITIALIZE ROBOT /////
 void initializeRobot() {
 
+	setDriveMotors(leftFrontMotor, leftRearMotor, rightFrontMotor, rightRearMotor);
+
 	// Stop All Motors //
 	motor[leftFrontMotor] = 0;
 	motor[leftRearMotor] = 0;
@@ -20,7 +22,7 @@ void initializeRobot() {
 	servoChangeRate[hopperTilt] = 2;
 
 	// Initialize encoders
-	resetDriveEncoder();
+	resetDriveEncoders();
 }
 
 #endif

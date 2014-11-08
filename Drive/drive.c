@@ -9,6 +9,10 @@
 #define LIFT_DOWNF (100)
 #define LIFT_DOWNS (75)
 
+//Encoder Conversion Rate
+#define INCH_TO_ENC (964/12)
+#define ENC_TO_INCH (12/964)
+
 //Driving Method for Wheels, Called Directly in Tele-Op
 //The params are naturally the joysticks, thus named after their axis
 void DriveMecWheels(int Y1, int X1, int X2) {

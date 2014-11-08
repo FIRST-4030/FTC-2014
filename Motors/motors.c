@@ -35,13 +35,17 @@ void driveMotors(int left, int right, const int duration = 0) {
 	}
 }
 
-// Reset the left drive encoder
-void resetDriveEncoder() {
+// Encoder methods for wheels
+void resetDriveEncoders() {
+	nMotorEncoder[driveLeftFront] = 0;
+	nMotorEncoder[driveLeftRear] = 0;
+	nMotorEncoder[driveRightFront] = 0;
 	nMotorEncoder[driveRightRear] = 0;
 }
 
-int readDriveEncoder() {
-	return nMotorEncoder[driveRightRear];
+int readAvgDriveEncoder() {
+	return (nMotorEncoder[driveLeftFront] + nMotorEncoder[driveLeftRear]
+	+ nMotorEncoder[driveRightFront] +	nMotorEncoder[driveRightRear]) * -1 / 4;
 }
 
 //Encoder methods for lift motor

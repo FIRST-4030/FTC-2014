@@ -33,6 +33,7 @@ task main()
 	while(true)
 	{
 		getJoystickSettings(joystick);
+		int encoder = readAvgDriveEncoder();
 
 		//Goal Hook Servo
 		if(joy1Btn(7)==1||joy1Btn(8)==1) {
