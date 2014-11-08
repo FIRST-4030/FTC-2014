@@ -41,6 +41,22 @@ task main()
 	while(true)
 	{
 		getJoystickSettings(joystick);
-
+		if(joy1Btn(7)==1||joy1Btn(8)==1) {
+			setHookServo[HOOK_MIN];
+		}
+			else if (joy1Btn(5)==1||joy1Btn(6)==1) {
+				setHookServo[HOOK_MAX];
+			}//SPINNER IN and SPINNER OUT
+			if(joy2Btn(6)==1) {
+				driveSpinnerMotor[SPINNER_IN];
+				else if(joy2Btn(5)==1) {
+					driveSpinnerMotor[SPINNER_OUT];
+				}
+				if(joy2_TopHat == 0) {
+					setHoperServo[HOPPER_MIN];
+				}
+					else i(joy2_TopHat == 4) {
+						setHopperServo[HOPPER_MAX];
+					}
 	}
 }
