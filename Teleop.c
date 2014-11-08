@@ -26,8 +26,6 @@
 #pragma debuggerWindows("joystickGame");
 #include "teleop_includes.h"
 
-#define SPINNER_EJECT_SPEED (50)
-
 task main()
 {
   initializeRobot();
