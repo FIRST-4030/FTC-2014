@@ -11,28 +11,16 @@ void initializeRobot() {
 	motor[rightRearMotor] = 0;
 	motor[spinnerMotor] = 0;
 	motor[liftMotor] = 0;
-	motor[leftWinch] = 0;
-	motor[rightWinch] = 0;
 
-	/* Commented out to test servo on new robot for 2014 year
-	// Medium hook rate and retracted position
-	SetHookServos(HOOK_MIN);
-	*/
-	servoChangeRate[leftHook] = 2;
-	servoChangeRate[rightHook] = 2;
+	// Put Servos to Default Position //
+	SetHookServo(HOOK_MIN);
+	servoChangeRate[goalHook] = 1;
 
-	/* Commented out for same reason as above
-	// Low hopper speed and retracted position
-	SetHopperServos(HOPPER_MAX);
-	*/
-	servoChangeRate[leftHopper] = 1;
-	servoChangeRate[rightHopper] = 1;
+	SetHopperServo(HOPPER_MIN);
+	servoChangeRate[hopperTilt] = 2;
 
 	// Initialize encoders
 	resetDriveEncoder();
-
-	// Enable the light sensors
-	FlashLights(1, 0);
 }
 
 #endif

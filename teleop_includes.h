@@ -6,10 +6,12 @@
 
 // Teleop Includes
 #include "JoystickDriver.c"
-#include "Sensors/ir.c"
 #include "Motors/servos.c"
 #include "Motors/motors.c"
 #include "Drive/drive.c"
+#include "Drive/drive_direct.c"
+#include "Drive/drive_tank.c"
+#include "Drive/drive_mec.c"
 
 #include "init_robot.c";
 

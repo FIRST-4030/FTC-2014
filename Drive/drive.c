@@ -3,6 +3,8 @@
 
 // Motor Speeds
 #define WHEEL_MAX (100)
+#define SPINNER_IN (100)
+#define SPINNER_OUT (-50)
 
 //Driving Method for Wheels, Called Directly in Tele-Op
 //The params are naturally the joysticks, thus named after their axis
@@ -43,11 +45,21 @@ void TurnRight(int power) {
 	DriveMecWheels(0, 0, power);
 }
 
+//Motor Driving Methods for Non-Wheel Motors
+void DriveSpinnerMotor(int power)
+{
+	motor[spinnerMotor] = power;
+}
+
 //Stopping Motors
 
 //Stopping wheels with this method is only necessary in auto
 void StopWheelMotors() {
 	DriveMecWheels(0, 0, 0);
+}
+
+void StopSpinnerMotor() {
+	DriveSpinnerMotor(0);
 }
 
 #endif
