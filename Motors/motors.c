@@ -6,12 +6,6 @@ tMotor driveLeftFront;
 tMotor driveLeftRear;
 tMotor driveRightFront;
 tMotor driveRightRear;
-void setDriveMotors(tMotor leftF, tMotor leftR, tMotor rightF, tMotor rightR) {
-	driveLeftFront = leftF;
-	driveLeftRear = leftR;
-	driveRightFront = rightF;
-	driveRightRear = rightR;
-}
 
 // Run motors at the specified speed indefinately
 void runDriveMotors(int left, int right) {
@@ -48,14 +42,13 @@ int readAvgDriveEncoder() {
 	+ nMotorEncoder[driveRightFront] +	nMotorEncoder[driveRightRear]) * -1 / 4;
 }
 
-//Encoder methods for lift motor
-void resetLiftEncoder() {
-	nMotorEncoder[liftMotor] = 0;
+void initMotors(tMotor leftF, tMotor leftR, tMotor rightF, tMotor rightR) {
+	driveLeftFront = leftF;
+	driveLeftRear = leftR;
+	driveRightFront = rightF;
+	driveRightRear = rightR;
+	stopDriveMotors();
+	resetDriveEncoders();
 }
-
-int readLiftEncoder() {
-	return nMotorEncoder[liftMotor];
-}
-
 
 #endif

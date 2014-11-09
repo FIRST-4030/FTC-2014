@@ -1,5 +1,26 @@
-#ifndef FTC_LIFTTASK
-#define FTC_LIFTTASK
+#ifndef FTC_LIFT
+#define FTC_LIFT
+
+tMotor liftPrimary;
+void initLift(tMotor lift) {
+	liftPrimary = lift;
+	motor[liftPrimary] = 0;
+}
+
+runLiftMotor(int speed, const int duration = 0) {
+	motor[liftPrimary] = speed;
+	if (duration > 0) {
+		wait1Msec(duration);
+	}
+}
+
+void resetLiftEncoder() {
+	nMotorEncoder[liftPrimary] = 0;
+}
+
+int readLiftEncoder() {
+	return nMotorEncoder[liftPrimary];
+}
 
 task Lift()
 {

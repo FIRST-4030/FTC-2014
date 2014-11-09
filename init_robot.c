@@ -4,25 +4,25 @@
 ///// INITIALIZE ROBOT /////
 void initializeRobot() {
 
-	setDriveMotors(leftFrontMotor, leftRearMotor, rightFrontMotor, rightRearMotor);
+	// Stop all drive motors
+	#ifdef FTC_MOTORS
+	initMotors(leftFrontMotor, leftRearMotor, rightFrontMotor, rightRearMotor);
+	#endif
+	#ifdef FTC_LIFTTASK
+	initLift(liftMotor);
+	#endif
 
-	// Stop All Motors //
-	motor[leftFrontMotor] = 0;
-	motor[leftRearMotor] = 0;
-	motor[rightFrontMotor] = 0;
-	motor[rightRearMotor] = 0;
-	motor[spinnerMotor] = 0;
-	motor[liftMotor] = 0;
+	// Stop the spinner
+	#ifdef FTC_SPINNER
+	// Not yet implemented
+	//initSpinner(spinnerMotor);
+	//motor[spinnerMotor] = 0;
+	#endif FTC_SPINNER
 
-	// Put Servos to Default Position //
-	SetHookServo(HOOK_MIN);
-	servoChangeRate[goalHook] = 1;
-
-	SetHopperServo(HOPPER_MIN);
-	servoChangeRate[hopperTilt] = 2;
-
-	// Initialize encoders
-	resetDriveEncoders();
+	// Set servo rates and start positions
+	#ifdef FTC_SERVOS
+	servosInit(goalHook, hopperTilt);
+	#endif
 }
 
 #endif
