@@ -35,8 +35,6 @@ task main()
 		getJoystickSettings(joystick);
 		int encoder = readAvgDriveEncoder();
 
-		nxtDisplayCenteredTextLine(3, "TopHat: %d", joystick.joy1_TopHat);
-
 		//Goal Hook Servo
 		if(joystick.joy1_TopHat == 2) {
 			SetHookServo(HOOK_MAX);
