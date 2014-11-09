@@ -22,7 +22,7 @@ void setServo(TServoIndex s, int position, int min = 0, int max = 255) {
 }
 
 void SetHookServo (int position, int min = HOOK_MIN, int max = HOOK_MAX) {
-	setServo(servoHook, position);
+	setServo(servoHook, position, min, max);
 }
 void SetHopperServo (int position, int min = HOPPER_MIN, int max = HOPPER_MAX) {
 	setServo(servoHopper, position, min, max);
@@ -30,11 +30,11 @@ void SetHopperServo (int position, int min = HOPPER_MIN, int max = HOPPER_MAX) {
 
 void servosInit(TServoIndex hook, TServoIndex hopper) {
 	servoHook = hook;
-	servoChangeRate[servoHopper] = HOOK_RATE;
+	servoChangeRate[servoHook] = HOOK_RATE;
 	SetHookServo(HOOK_MIN);
 
 	servoHopper = hopper;
-	servoChangeRate[servoHopper] = HOPPER_RATE;
+	servoChangeRate[hopper] = HOPPER_RATE;
 	SetHopperServo(HOPPER_MIN);
 }
 
