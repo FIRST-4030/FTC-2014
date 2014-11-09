@@ -35,29 +35,29 @@ task main()
 		getJoystickSettings(joystick);
 		int encoder = readAvgDriveEncoder();
 
+		nxtDisplayCenteredTextLine(3, "TopHat: %d", joystick.joy1_TopHat);
+
 		//Goal Hook Servo
-		if(joy1Btn(7)==1||joy1Btn(8)==1) {
+		if(joystick.joy1_TopHat == 2) {
 			SetHookServo(HOOK_MAX);
-		} else if (joy1Btn(5)==1||joy1Btn(6)==1) {
+		} else if (joystick.joy1_TopHat == 6) {
 			SetHookServo(HOOK_MIN);
 		}
 
 		//Spinner Motor
-		if(joy2Btn(6)==1) {
+		if(joy1Btn(6)) {
 			DriveSpinnerMotor(SPINNER_IN);
-		} else if(joy2Btn(5)==1) {
+		} else if(joy1Btn(5)) {
 			DriveSpinnerMotor(SPINNER_OUT);
 		} else {
 			StopSpinnerMotor();
 		}
 
 		//Tilting Hopper Servo
-		if(joystick.joy2_TopHat == 0) {
+		if(joystick.joy1_TopHat == 0) {
 			SetHopperServo(HOPPER_MIN);
-		} else if(joystick.joy2_TopHat == 4) {
+		} else if(joystick.joy1_TopHat == 4) {
 			SetHopperServo(HOPPER_MAX);
 		}
-
-
 	}
 }
