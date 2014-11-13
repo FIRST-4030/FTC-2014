@@ -37,6 +37,14 @@ void resetDriveEncoders() {
 	nMotorEncoder[driveRightRear] = 0;
 }
 
+int readAvgLeftDriveEncoder() {
+	return (nMotorEncoder[driveLeftRear] + nMotorEncoder[driveRightFront]) * -1 / 2;
+}
+
+int readAvgRightDriveEncoder() {
+	return (nMotorEncoder[driveLeftFront] + nMotorEncoder[driveRightRear]) * -1 / 2;
+}
+
 int readAvgDriveEncoder() {
 	return (nMotorEncoder[driveLeftFront] + nMotorEncoder[driveLeftRear]
 	+ nMotorEncoder[driveRightFront] +	nMotorEncoder[driveRightRear]) * -1 / 4;

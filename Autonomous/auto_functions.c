@@ -15,12 +15,20 @@ void autoKickStandWOTurn() {
 	ClearTimer(T1);
 
 	//Time maxes out at 10 seconds, after that assume that touch sensor is not returning proper values
-	while(!isPressed() && time100[T1] < 100) {
+	while(!isKSPressed() && time100[T1] < 100) {
 		DriveForward(100);
 	}
 	StopWheelMotors();
 
-	//insert code to drive left until a certain encoder value is hit here//
+	//Drive Left Until Certain We've Hit the Kickstand
+	resetDriveEncoders();
+	int leftDistance = 10; //To be replaced
+	while(readAvgLeftDriveEncoder() < leftDistance) {
+		DriveLeft();
+	}
+	StopWheelMotors();
+
+	// Insert code to navigate to center field goal and score //
 }
 
 void autoParking() {

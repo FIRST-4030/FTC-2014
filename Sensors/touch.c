@@ -3,15 +3,25 @@
 
 #include "../drivers/lego-touch.h"
 
+// For Kickstand Touch Sensor //
 //Used if the program wants the sensor in its binary values
 //0 being not pressed and 1 being pressed
-int readTouch() {
-	return SensorValue[touch];
+int readKSTouch() {
+	return SensorValue[ksTouch];
 }
 
 //Used if the program wants the raw boolean
-bool isTouchPressed() {
-	return TSReadState(touch);
+bool isKSTouchPressed() {
+	return TSReadState(ksTouch);
+}
+
+// For Lift Touch Sensor //
+int readLTouch() {
+	return SensorValue[lTouch];
+}
+
+bool isLTouchPressed() {
+	return TSReadState(lTouch);
 }
 
 #endif
