@@ -13,6 +13,9 @@ task DriveMec()
 	//Create "deadzone" variables. Adjust threshold value to increase/decrease deadzone
 	int X2 = 0, Y1 = 0, X1 = 0, threshold = 10;
 
+	//For travelling at half speed
+	bool halfSpeed = false;
+
 	//Loop Forever
 	while(true)
 	{
@@ -38,6 +41,17 @@ task DriveMec()
 			X2 = joystick.joy1_x2;
 		else
 			X2 = 0;
+
+		//For Driving at Half the Speed
+		if(joy1Btn(2)) {
+			halfSpeed = !halfSpeed;
+		}
+
+		if(halfSpeed) {
+			Y1 /= 2;
+			X1 /= 2;
+			X2 /= 2;
+		}
 
 		DriveMecWheels(Y1, X1, X2);
 	}

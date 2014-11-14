@@ -36,25 +36,25 @@ task main()
 		int encoder = readAvgDriveEncoder();
 
 		//Goal Hook Servo
-		if(joystick.joy1_TopHat == 2) {
+		if(joy1Btn(7||joy1Btn(8)) {
 			SetHookServo(HOOK_MAX);
-		} else if (joystick.joy1_TopHat == 6) {
+		} else if (joy1Btn(5)||joy1Btn(6)) {
 			SetHookServo(HOOK_MIN);
 		}
 
 		//Spinner Motor
-		if(joy1Btn(6)) {
+		if(joy2Btn(6)) {
 			DriveSpinnerMotor(SPINNER_IN);
-		} else if(joy1Btn(5)) {
+		} else if(joy2Btn(5)) {
 			DriveSpinnerMotor(SPINNER_OUT);
 		} else {
 			StopSpinnerMotor();
 		}
 
 		//Tilting Hopper Servo
-		if(joystick.joy1_TopHat == 0) {
+		if(joystick.joy2_TopHat == 0) {
 			SetHopperServo(HOPPER_MIN);
-		} else if(joystick.joy1_TopHat == 4) {
+		} else if(joystick.joy2_TopHat == 4) {
 			SetHopperServo(HOPPER_MAX);
 		}
 	}
