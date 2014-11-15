@@ -4,7 +4,7 @@
 // Autonomous Mode Operational Functions //
 // Put functions here which do specific actions on the robot. //
 
-#define AUTO_DRIVE_SPEED (100)
+#define AUTO_DRIVE_SPEED (-100)
 
 // Assuming a start position parallel to the goal, back up and score
 void AutoScore() {
@@ -20,13 +20,16 @@ void AutoScore() {
 
 void AutoKickstandAhead() {
 	// Hit the kickstand
-	driveToEncoder(AUTO_DRIVE_SPEED, 400);
+	driveToEncoder(AUTO_DRIVE_SPEED, 4500);
+	wait1Msec(1000 * 2);
 	// Back up to avoid hitting the goal
-	driveToEncoder(-AUTO_DRIVE_SPEED, -100);
+	driveToEncoder(-AUTO_DRIVE_SPEED, -500);
+	wait1Msec(1000 * 2);
 	// Turn to align with the goal
 	driveToGyro(90, false);
 
-	AutoScore();
+	// Disabled for the moment
+	//AutoScore();
 }
 
 void AutoKickstandIntermediate() {

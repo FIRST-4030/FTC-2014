@@ -27,5 +27,7 @@
 task main()
 {
   initializeRobot();
+  StartTask(gyro);
   AutoKickstandAhead();
+  StopTask(gyro);
 }
