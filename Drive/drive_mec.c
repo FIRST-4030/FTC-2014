@@ -16,6 +16,9 @@ task DriveMec()
 	//For travelling at half speed
 	bool halfSpeed = false;
 
+	//For reversing driving
+	bool reverse = false;
+
 	//Loop Forever
 	while(true)
 	{
@@ -42,6 +45,11 @@ task DriveMec()
 		else
 			X2 = 0;
 
+		//For Driving reversed
+		if(joy1Btn(1)) {
+			reverse = !reverse;
+		}
+
 		//For Driving at Half the Speed
 		if(joy1Btn(2)) {
 			halfSpeed = !halfSpeed;
@@ -51,6 +59,12 @@ task DriveMec()
 			Y1 /= 2;
 			X1 /= 2;
 			X2 /= 2;
+		}
+
+		if(reverse) {
+			Y1 *= -1
+			X1 *= -1
+			X2 *= -1
 		}
 
 		DriveMecWheels(Y1, X1, X2);
