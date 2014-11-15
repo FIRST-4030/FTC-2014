@@ -36,9 +36,9 @@ task main()
 		int encoder = readAvgDriveEncoder();
 
 		//Goal Hook Servo
-		if(joy1Btn(7||joy1Btn(8)) {
+		if(joy1Btn(7) || joy1Btn(8)) {
 			SetHookServo(HOOK_MAX);
-		} else if (joy1Btn(5)||joy1Btn(6)) {
+		} else if (joy1Btn(5) || joy1Btn(6)) {
 			SetHookServo(HOOK_MIN);
 		}
 
