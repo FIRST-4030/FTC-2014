@@ -4,41 +4,56 @@
 // Autonomous Mode Operational Functions //
 // Put functions here which do specific actions on the robot. //
 
-//Note: Stop motors in between driving tasks
+#define AUTO_DRIVE_SPEED (100)
 
-void autoKickStandWTurn() {
-	//insert code here//
+// Assuming a start position parallel to the goal, back up and score
+void AutoScore() {
+	//drive backwards until IR is in view
+	driveToIR(AUTO_DRIVE_SPEED, 1);
+	//drive backwards until we're at an angle we can score from
+	driveToEncoder(-AUTO_DRIVE_SPEED, 200);
+	//turn facing IR
+	driveToIR(AUTO_DRIVE_SPEED, 5);
+	//Drive until ball is in goal
+	// Not implemented -- driveToTouch(AUTO_DRIVE_SPEED, TS_index);
 }
 
-void autoKickStandWOTurn() {
-	//Use Timer to determine if touch sensor is nonresponsive
-	ClearTimer(T1);
+void AutoKickstandAhead() {
+	// Hit the kickstand
+	driveToEncoder(AUTO_DRIVE_SPEED, 400);
+	// Back up to avoid hitting the goal
+	driveToEncoder(-AUTO_DRIVE_SPEED, -100);
+	// Turn to align with the goal
+	driveToGyro(90, false);
 
-	//Time maxes out at 10 seconds, after that assume that touch sensor is not returning proper values
-	while(!isKSPressed() && time100[T1] < 100) {
-		DriveForward(100);
-	}
-	StopWheelMotors();
-
-	//Drive Left Until Certain We've Hit the Kickstand
-	resetDriveEncoders();
-	int leftDistance = 10; //To be replaced
-	while(readAvgLeftDriveEncoder() < leftDistance) {
-		DriveLeft();
-	}
-	StopWheelMotors();
-
-	// Insert code to navigate to center field goal and score //
+	AutoScore();
 }
 
-void autoParking() {
-	if(irValid()) {
-		if(readIR() == 5) {
-			autoKickStandWTurn();
-		} else {
-			autoKickStandWOTurn();
-		}
-	}
+void AutoKickstandIntermediate() {
+	//turn towards pole
+	driveToGyro(45, true);
+	//drive until pole is down
+	driveToEncoder(AUTO_DRIVE_SPEED, 200);
+	// Back up to avoid hitting the goal
+	driveToEncoder(-AUTO_DRIVE_SPEED, 100);
+	// Align parallel to the goal
+	driveToGyro(90, false);
+
+	AutoScore();
+}
+
+void AutoKickstandSide() {
+		// Re-align to pole position
+		driveToGyro(90, true);
+		driveToEncoder(AUTO_DRIVE_SPEED, 50);
+		driveToGyro(90, false);
+
+		// Hit the kickstand
+		driveToEncoder(AUTO_DRIVE_SPEED, 200);
+		// Align parallel to the goal
+		driveToGyro(90, false);
+
+		AutoScore();
 }
 
 #endif

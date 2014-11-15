@@ -30,22 +30,22 @@ void driveMotors(int left, int right, const int duration = 0) {
 }
 
 // Encoder methods for wheels
-void resetDriveEncoders() {
+void resetDriveEncoder() {
 	nMotorEncoder[driveLeftFront] = 0;
 	nMotorEncoder[driveLeftRear] = 0;
 	nMotorEncoder[driveRightFront] = 0;
 	nMotorEncoder[driveRightRear] = 0;
 }
 
-int readAvgLeftDriveEncoder() {
+int readLeftDriveEncoder() {
 	return (nMotorEncoder[driveLeftRear] + nMotorEncoder[driveRightFront]) * -1 / 2;
 }
 
-int readAvgRightDriveEncoder() {
+int readRightDriveEncoder() {
 	return (nMotorEncoder[driveLeftFront] + nMotorEncoder[driveRightRear]) * -1 / 2;
 }
 
-int readAvgDriveEncoder() {
+int readDriveEncoder() {
 	return (nMotorEncoder[driveLeftFront] + nMotorEncoder[driveLeftRear]
 	+ nMotorEncoder[driveRightFront] +	nMotorEncoder[driveRightRear]) * -1 / 4;
 }
@@ -56,7 +56,7 @@ void initMotors(tMotor leftF, tMotor leftR, tMotor rightF, tMotor rightR) {
 	driveRightFront = rightF;
 	driveRightRear = rightR;
 	stopDriveMotors();
-	resetDriveEncoders();
+	resetDriveEncoder();
 }
 
 #endif
