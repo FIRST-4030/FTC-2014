@@ -1,8 +1,9 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  none)
 #pragma config(Hubs,  S3, HTServo,  none,     none,     none)
-#pragma config(Sensor, S1,     motors,         sensorI2CMuxController)
+#pragma config(Sensor, S1,     motors,         sensorNone)
 #pragma config(Sensor, S2,     SMUX,           sensorI2CCustom9V)
-#pragma config(Sensor, S3,     servos,         sensorI2CMuxController)
+#pragma config(Sensor, S3,     servos,         sensorNone)
+#pragma config(Sensor, S4,     gyroSensor,     sensorI2CHiTechnicGyro)
 #pragma config(Motor,  motorA,           ,             tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  motorB,           ,             tmotorNXT, openLoop, reversed, encoder)
 #pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop, encoder)
@@ -33,7 +34,7 @@ task main()
 	while(true)
 	{
 		getJoystickSettings(joystick);
-		int encoder = readAvgDriveEncoder();
+		int encoder = readDriveEncoder();
 
 		//Goal Hook Servo
 		if(joy1Btn(7) || joy1Btn(8)) {
