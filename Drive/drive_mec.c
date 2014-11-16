@@ -13,11 +13,8 @@ task DriveMec()
 	//Create "deadzone" variables. Adjust threshold value to increase/decrease deadzone
 	int X2 = 0, Y1 = 0, X1 = 0, threshold = 10;
 
-	//For travelling at half speed
-	bool halfSpeed = false;
-
-	//For reversing driving
-	bool reverse = false;
+	//For travelling at half speed and in reverse
+	bool halfSpeed = false, reverse = false, pressedOne = false, pressedTwo = false;
 
 	//Loop Forever
 	while(true)
@@ -45,13 +42,12 @@ task DriveMec()
 		else
 			X2 = 0;
 
-		//For Driving reversed
-		if(joy1Btn(1)) {
-			reverse = !reverse;
-		}
-
 		//For Driving at Half the Speed
-		if(joy1Btn(2)) {
+		if(joy1Btn(2))
+			pressedTwo = true;
+
+		if(pressedTwo && !joy1Btn(2)) {
+			pressedTwo = false;
 			halfSpeed = !halfSpeed;
 		}
 
@@ -61,10 +57,19 @@ task DriveMec()
 			X2 /= 2;
 		}
 
+		//For Driving reversed
+		if(joy1Btn(1))
+			pressedOne = true;
+
+		if(pressedOne && !joy1Btn(1)) {
+			pressedOne = false;
+			reverse = !reverse;
+		}
+
 		if(reverse) {
-			Y1 *= -1
-			X1 *= -1
-			X2 *= -1
+			Y1 *= -1;
+			X1 *= -1;
+			X2 *= -1;
 		}
 
 		DriveMecWheels(Y1, X1, X2);
