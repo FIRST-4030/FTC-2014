@@ -19,6 +19,6 @@ const tMUXSensor lightLeft = msensor_S2_4;
 #include "../Drive/drive.c"
 
 #include "auto_functions.c"
-#include ".../init_robot.c";
+#include "../init_robot.c";
 
 #endif
