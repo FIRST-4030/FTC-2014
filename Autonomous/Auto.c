@@ -28,6 +28,26 @@ task main()
 {
   initializeRobot();
   StartTask(gyro);
-  AutoKickstandAhead();
+  while(readDriveEncoder() < 2300) {
+  	DriveMecWheels(100, 0, 0);
+  }
+  stopDriveMotors();
+  int ir = readIR();
+  resetDriveEncoder();
+  if(ir == 3) {
+  	while(readLeftDriveEncoder() < 2000) {
+  		DriveMecWheels(0, -100, 0);
+  	}
+  	stopDriveMotors();
+  	resetGyro();
+  	while(readGyro() > -180) {
+  		DriveMecWheels(0, 0, -75);
+  	}
+  }
+  //AutoKickstandAhead();
   StopTask(gyro);
+  while (true) {
+  	wait1Msec(100);
+  	ir = ir;
+  }
 }
