@@ -28,22 +28,19 @@ task main()
 {
   initializeRobot();
   StartTask(gyro);
-  while(readDriveEncoder() < 2300) {
-  	DriveMecWheels(100, 0, 0);
-  }
-  stopDriveMotors();
+  //Scouting, move out and check IR to determine field position
+  driveToEncoder(100, 2300);
   int ir = readIR();
-  resetDriveEncoder();
-  if(ir == 3) {
-  	while(readLeftDriveEncoder() < 2000) {
-  		DriveMecWheels(0, -100, 0);
-  	}
-  	stopDriveMotors();
-  	resetGyro();
-  	while(readGyro() > -180) {
-  		DriveMecWheels(0, 0, -75);
-  	}
-  }
+  int testIR = readMidIR();
+  if(ir == 0 || testIR == 0) {
+  	//Need some failsafe code in case the ir sensor is broken/unplugged
+  }else if(ir == 3) {
+  	AutoScoreAhead();
+  } else if(ir == 4) {
+  	AutoScoreIntermediate();
+	} else if(ir == 5) {
+		AutoScoreSide();
+	}
   //AutoKickstandAhead();
   StopTask(gyro);
   while (true) {

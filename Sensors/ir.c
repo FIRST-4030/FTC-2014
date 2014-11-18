@@ -7,6 +7,14 @@ int readIR() {
 	return HTIRS2readACDir(IRSeeker);
 }
 
+int readMidIR() {
+	return HTIRS2readACDir(MidIRSeeker);
+}
+
+int readIR(tSensors irSeeker) {
+	return HTIRS2readACDir(irSeeker);
+}
+
 bool irValid(int seeker) {
 	if (seeker < 1) {
 		return false;

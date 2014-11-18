@@ -2,8 +2,9 @@
 #define FTC_AUTO_INCLUDES
 
 ///// Sensor Multiplexer Interface /////
-#include "drivers/hitechnic-sensormux.h"
+#include "../drivers/hitechnic-sensormux.h"
 const tMUXSensor sonarSensor = msensor_S2_1;
+const tMUXSensor MidIRSeeker = msensor_S2_1;
 const tMUXSensor IRSeeker = msensor_S2_2;
 const tMUXSensor lightRight = msensor_S2_3;
 const tMUXSensor lightLeft = msensor_S2_4;
@@ -15,7 +16,7 @@ const tMUXSensor lightLeft = msensor_S2_4;
 #include "../Sensors/gyro.c"
 #include "../Motors/motors.c"
 #include "../Motors/servos.c"
-#include "../Drive/lines.c"
+//#include "../Drive/lines.c"
 #include "../Drive/drive.c"
 
 #include "auto_functions.c"

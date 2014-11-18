@@ -11,6 +11,13 @@
 #define GYRO_SPEED (100)
 #define SONAR_SPEED (25)
 
+//Sensors to Use in 'driveTo' functions in case of multiple sensors
+tMUXSensor IR;
+
+void initIR(tMUXSensor irSensor) {
+	IR = irSensor;
+}
+
 //Driving Method for Wheels, Called Directly in Tele-Op
 //The params are naturally the joysticks, thus named after their axis
 void DriveMecWheels(int Y1, int X1, int X2) {
@@ -32,7 +39,7 @@ void StopSpinnerMotor() {
 }
 
 // Drive until we hit any of the specified parameters
-bool driveToParam(int speed, int distance = 0, int time = 5000, bool turn = false, int ir = 0, int sonar = 0, int gyro = 0) {
+bool driveToParam(int speed, int distance = 0, int time = 5000, bool turn = false, bool horizontal = false, int ir = 0, int sonar = 0, int gyro = 0) {
 	// Stop
 	stopDriveMotors();
 
@@ -65,6 +72,8 @@ bool driveToParam(int speed, int distance = 0, int time = 5000, bool turn = fals
 	// Drive straight or turn
 	if (turn) {
 		runDriveMotors(-speed, speed);
+	} else if(horizontal) {
+		runDriveMotorsHorizontal(speed, speed);
 	} else {
 		runDriveMotors(speed, speed);
 	}
@@ -135,8 +144,8 @@ bool driveToParam(int speed, int distance = 0, int time = 5000, bool turn = fals
 }
 
 // Shorthand for IR-based driving
-bool driveToIR(int speed, int ir, int time = 5000) {
-	return driveToParam(speed, 0, time, false, ir, 0, 0);
+bool driveToIR(int speed, bool turn, bool horizontal, int ir, int time = 5000) {
+	return driveToParam(speed, 0, time, turn, horizontal, ir, 0, 0);
 }
 
 // Shorthand for sonar-based driving

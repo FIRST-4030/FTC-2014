@@ -15,6 +15,14 @@ void runDriveMotors(int left, int right) {
 	motor[driveRightRear] = right;
 }
 
+//Run motors at the specified speed indefinately
+void runDriveMotorsHorizontal(int top, int bottom) {
+	motor[driveLeftFront]  = top;
+	motor[driveLeftRear]  = -bottom;
+	motor[driveRightFront] = -top;
+	motor[driveRightRear] = bottom;
+}
+
 // Stop all drive motion
 void stopDriveMotors() {
 	runDriveMotors(0, 0);
