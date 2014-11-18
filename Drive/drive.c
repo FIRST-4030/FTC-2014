@@ -88,7 +88,7 @@ bool driveToParam(int speed, int distance = 0, int time = 5000, bool turn = fals
 		} else if (time != 0 && (time1[T1] > time)) {
 			break;
 		} else if (ir != 0) {
-			int irVal = readIR();
+			int irVal = readIR(IR);
 
 			// Stop if the IR reading is invalid
 			if (!irValid(irVal)) {

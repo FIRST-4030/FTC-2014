@@ -15,6 +15,10 @@ int readIR(tSensors irSeeker) {
 	return HTIRS2readACDir(irSeeker);
 }
 
+int readIR(tMUXSensor irSeeker) {
+	return HTIRS2readACDir(irSeeker);
+}
+
 bool irValid(int seeker) {
 	if (seeker < 1) {
 		return false;
