@@ -66,6 +66,12 @@ bool isLiftAtTarget() {
 	return liftAtTarget;
 }
 
+void waitLiftAtTarget() {
+	while (!isLiftAtTarget()) {
+		wait1Msec(10);
+	}
+}
+
 void initLift(tMotor lift, LIFT_SENSORT_PORT_TYPE touch) {
 	liftDrive = lift;
 	liftTouch = touch;
