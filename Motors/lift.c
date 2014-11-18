@@ -59,23 +59,29 @@ void stopLift() {
 	driveLift(0);
 }
 
-bool isLiftAtTarget() {
-	if (!isLiftReady()) {
-		return false;
-	}
-	return liftAtTarget;
-}
-
-void waitLiftAtTarget() {
-	while (!isLiftAtTarget()) {
-		wait1Msec(10);
-	}
-}
-
 void initLift(tMotor lift, LIFT_SENSORT_PORT_TYPE touch) {
 	liftDrive = lift;
 	liftTouch = touch;
 	stopLift();
+}
+
+bool readLiftTouch() {
+	return SensorValue[liftTouch];
+}
+
+void resetLiftEncoder() {
+	nMotorEncoder[liftDrive] = 0;
+}
+
+int readLiftEncoder() {
+	return nMotorEncoder[liftDrive];
+}
+
+void liftFatalErr(string msg) {
+	hogCPU();
+	stopLift();
+	nxtDisplayCenteredBigTextLine(1, "Lift: %s", msg);
+	StopAllTasks();
 }
 
 bool isLiftReady() {
@@ -109,23 +115,25 @@ bool setLiftCmd(LiftState cmd) {
 	return true;
 }
 
-bool readLiftTouch() {
-	return SensorValue[liftTouch];
+bool isLiftAtTarget() {
+	if (!isLiftReady()) {
+		return false;
+	}
+	return liftAtTarget;
 }
 
-void resetLiftEncoder() {
-	nMotorEncoder[liftDrive] = 0;
+void waitLiftAtTarget() {
+	while (!isLiftAtTarget()) {
+		wait1Msec(10);
+	}
 }
 
-int readLiftEncoder() {
-	return nMotorEncoder[liftDrive];
-}
-
-void liftFatalErr(string msg) {
-	hogCPU();
-	stopLift();
-	nxtDisplayCenteredBigTextLine(1, "Lift: %s", msg);
-	StopAllTasks();
+bool setWaitLiftCmd(LiftState cmd) {
+	if (!setLiftCmd(cmd)) {
+		return false;
+	}
+	waitLiftAtTarget();
+	return true;
 }
 
 task Lift() {
