@@ -149,13 +149,13 @@ bool driveToIR(int speed, bool turn, bool horizontal, int ir, int time = 5000) {
 }
 
 // Shorthand for sonar-based driving
-bool driveToSonar(int sonar, int time = 5000) {
-	return driveToParam(SONAR_SPEED, 0, time, false, 0, sonar, 0);
+bool driveToSonar(int sonar, bool horizontal, int time = 5000) {
+	return driveToParam(SONAR_SPEED, 0, time, false, horizontal, 0, sonar, 0);
 }
 
 // Shorthand for distance-based driving
 void driveToEncoder(int speed, int distance, int time = 5000) {
-	driveToParam(speed, distance, time, false, 0, 0, 0);
+	driveToParam(speed, distance, time, false, false, 0, 0, 0);
 }
 
 // Shorthand for gyro-based driving
@@ -166,7 +166,7 @@ bool driveToGyro(int degrees, bool left = true, int time = 5000) {
 		speed *= -1;
 		degrees *= -1;
 	}
-	return driveToParam(speed, 0, time, true, 0, 0, degrees);
+	return driveToParam(speed, 0, time, true, false, 0, 0, degrees);
 }
 
 #endif
