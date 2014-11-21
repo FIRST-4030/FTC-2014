@@ -24,6 +24,16 @@
 #pragma debuggerWindows("joystickGame");
 #include "teleop_includes.h"
 
+void stopAndDump(LiftState cmd) {
+	StopTask(DriveMec);
+	setWaitLiftCmd(cmd);
+	SetHopperServo(HOPPER_MIN);
+	wait1Msec(3 * 1000);
+	SetHopperServo(HOPPER_MAX);
+	setWaitLiftCmd(DRIVE);
+	StartTask(DriveMec);
+}
+
 task main()
 {
   initializeRobot();
@@ -65,22 +75,15 @@ task main()
 		if (joy2Btn(1) && joy2Btn(2)) {
 			liftReset();
 		} else if (joy2Btn(3) && joy2Btn(4)) {
-			setLiftCmd(HIGH);
+			stopAndDump(HIGH);
 		} else if(joy2Btn(1)) {
 			setLiftCmd(COLLECT);
 		} else if(joy2Btn(2)) {
 			setLiftCmd(DRIVE);
 		} else if(joy2Btn(3)) {
-			setLiftCmd(LOW);
+			stopAndDump(LOW);
 		} else if(joy2Btn(4)) {
-			setLiftCmd(MED);
-		}
-
-		//Tilting Hopper Servo
-		if(joystick.joy2_TopHat == 0) {
-			SetHopperServo(HOPPER_MIN);
-		} else if(joystick.joy2_TopHat == 4) {
-			SetHopperServo(HOPPER_MAX);
+			stopAndDump(MED);
 		}
 	}
 }
