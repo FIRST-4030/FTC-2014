@@ -14,6 +14,7 @@ const tSensors gyroSensor = S4;
 #include "JoystickDriver.c"
 #include "Motors/servos.c"
 #include "Motors/motors.c"
+//#include "Motors/lift.c"
 #include "Sensors/gyro.c"
 #include "Sensors/ir.c"
 #include "Sensors/touch.c"
