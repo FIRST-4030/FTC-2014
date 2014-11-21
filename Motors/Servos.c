@@ -2,10 +2,10 @@
 #define FTC_SERVOS
 
 #define HOOK_MIN (120)
-#define HOOK_MAX (180)
+#define HOOK_MAX (240)
 #define HOOK_RATE 2
-#define HOPPER_MIN (0)
-#define HOPPER_MAX (255)
+#define HOPPER_MAX (220)
+#define HOPPER_MIN (50)
 #define HOPPER_RATE 2
 
 TServoIndex servoHook;
@@ -35,7 +35,7 @@ void servosInit(TServoIndex hook, TServoIndex hopper) {
 
 	servoHopper = hopper;
 	servoChangeRate[hopper] = HOPPER_RATE;
-	SetHopperServo(HOPPER_MIN);
+	SetHopperServo(HOPPER_MAX);
 }
 
 #endif

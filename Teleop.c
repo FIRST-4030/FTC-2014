@@ -3,7 +3,7 @@
 #pragma config(Sensor, S1,     motors,         sensorNone)
 #pragma config(Sensor, S2,     SMUX,           sensorI2CCustom9V)
 #pragma config(Sensor, S3,     servos,         sensorNone)
-#pragma config(Sensor, S4,     gyroSensor,     sensorI2CHiTechnicGyro)
+#pragma config(Sensor, S4,     liftTS,         sensorTouch)
 #pragma config(Motor,  motorA,           ,             tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  motorB,           ,             tmotorNXT, openLoop, reversed, encoder)
 #pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop, encoder)
@@ -11,8 +11,8 @@
 #pragma config(Motor,  mtr_S1_C1_2,     leftRearMotor, tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     rightFrontMotor, tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     rightRearMotor, tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C3_1,     spinnerMotor,  tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C3_2,     liftMotor,     tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C3_1,     liftMotor,     tmotorTetrix, PIDControl, encoder)
+#pragma config(Motor,  mtr_S1_C3_2,     spinnerMotor,  tmotorTetrix, openLoop, encoder)
 #pragma config(Servo,  srvo_S3_C1_1,    goalHook,             tServoStandard)
 #pragma config(Servo,  srvo_S3_C1_2,    hopperTilt,           tServoStandard)
 #pragma config(Servo,  srvo_S3_C1_3,    unusedS3C13,          tServoStandard)
@@ -24,18 +24,32 @@
 #pragma debuggerWindows("joystickGame");
 #include "teleop_includes.h"
 
+void stopAndDump(LiftState cmd) {
+	StopTask(DriveMec);
+	setWaitLiftCmd(cmd);
+	SetHopperServo(HOPPER_MIN);
+	wait1Msec(3 * 1000);
+	SetHopperServo(HOPPER_MAX);
+	setWaitLiftCmd(DRIVE);
+	StartTask(DriveMec);
+}
+
 task main()
 {
   initializeRobot();
   waitForStart();
 
   StartTask(DriveMec);
+  StartTask(Lift);
+
+  bool pressedSix = false;
+  bool spinnerIn = false;
 
 	while(true)
 	{
 		getJoystickSettings(joystick);
-		int encoder = readDriveEncoder();
-		int ir = readIR();
+		//int encoder = readDriveEncoder();
+		//int ir = readIR();
 
 		//Goal Hook Servo
 		if(joy1Btn(7) || joy1Btn(8)) {
@@ -45,19 +59,31 @@ task main()
 		}
 
 		//Spinner Motor
-		if(joy2Btn(6)) {
+		if(joy2Btn(6))
+			pressedSix = true;
+
+		if(pressedSix && !joy2Btn(6)) {
+			pressedSix = false;
+			spinnerIn = !spinnerIn;
+		}
+		if(spinnerIn) {
 			DriveSpinnerMotor(SPINNER_IN);
-		} else if(joy2Btn(5)) {
-			DriveSpinnerMotor(SPINNER_OUT);
 		} else {
 			StopSpinnerMotor();
 		}
 
-		//Tilting Hopper Servo
-		if(joystick.joy2_TopHat == 0) {
-			SetHopperServo(HOPPER_MIN);
-		} else if(joystick.joy2_TopHat == 4) {
-			SetHopperServo(HOPPER_MAX);
+		if (joy2Btn(1) && joy2Btn(2)) {
+			liftReset();
+		} else if (joy2Btn(3) && joy2Btn(4)) {
+			stopAndDump(HIGH);
+		} else if(joy2Btn(1)) {
+			setLiftCmd(COLLECT);
+		} else if(joy2Btn(2)) {
+			setLiftCmd(DRIVE);
+		} else if(joy2Btn(3)) {
+			stopAndDump(LOW);
+		} else if(joy2Btn(4)) {
+			stopAndDump(MED);
 		}
 	}
 }

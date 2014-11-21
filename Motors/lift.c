@@ -1,27 +1,24 @@
 #ifndef FTC_LIFT
 #define FTC_LIFT
 
-#define LIFT_SENSORT_PORT_TYPE tMUXSensor
-//#define LIFT_SENSORT_PORT_TYPE tSensors
-
-#deinfe LIFT_SPEED (100)
-#define LIFT_DEAD_ZONE (10)
+#define LIFT_SPEED (100)
+#define LIFT_DEAD_ZONE (100)
 #define LIFT_FULL_ERR (100)
 
-#define LIFT_HEIGHT_COLLECT (0)
-#define LIFT_HEIGHT_DRIVE (10)
-#define LIFT_HEIGHT_LOW (100)
-#define LIFT_HEIGHT_MED (200)
-#define LIFT_HEIGHT_HIGH (300)
+#define LIFT_HEIGHT_COLLECT (10)
+#define LIFT_HEIGHT_DRIVE (1000)
+#define LIFT_HEIGHT_LOW (5000)
+#define LIFT_HEIGHT_MED (10000)
+#define LIFT_HEIGHT_HIGH (13000)
 
 // Define to use the Tetrix PID system
 // Clear to use our local PID system
-#define LIFT_REMOTE_PID
+//#define LIFT_REMOTE_PID
 
 bool liftReady = false;
 bool liftAtTarget = false;
 tMotor liftDrive;
-LIFT_SENSORT_PORT_TYPE liftTouch;
+tSensors liftTouch;
 typedef enum {
         RESET,
         COLLECT,
@@ -46,10 +43,10 @@ void driveLift(int speed) {
 			target = 1;
 		}
 
-		nMotorEncoderTarget[liftDrive] = target;	
+		nMotorEncoderTarget[liftDrive] = target;
 		motor[liftDrive] = speed;
 	}
-	
+
 	TNxtRunState liftTargetState() {
 		return nMotorRunState[liftDrive];
 	}
@@ -59,14 +56,17 @@ void stopLift() {
 	driveLift(0);
 }
 
-void initLift(tMotor lift, LIFT_SENSORT_PORT_TYPE touch) {
+void initLift(tMotor lift, tSensors touch) {
 	liftDrive = lift;
 	liftTouch = touch;
 	stopLift();
 }
 
 bool readLiftTouch() {
-	return SensorValue[liftTouch];
+	if (SensorValue[liftTouch]) {
+		return true;
+	}
+	return false;
 }
 
 void resetLiftEncoder() {
@@ -77,10 +77,11 @@ int readLiftEncoder() {
 	return nMotorEncoder[liftDrive];
 }
 
-void liftFatalErr(string msg) {
+void liftFatalErr() {
 	hogCPU();
 	stopLift();
-	nxtDisplayCenteredBigTextLine(1, "Lift: %s", msg);
+	nxtDisplayCenteredBigTextLine(1, "Lift Err");
+	wait1Msec(20*1000);
 	StopAllTasks();
 }
 
@@ -91,7 +92,7 @@ bool isLiftReady() {
 void waitLiftReady() {
 	while (!isLiftReady()) {
 		wait1Msec(10);
-	}	
+	}
 }
 
 void liftReset() {
@@ -103,7 +104,7 @@ void liftReset() {
 LiftState getLiftCmd() {
 	if (!isLiftReady()) {
 		return RESET;
-	}	
+	}
 	return liftCmd;
 }
 
@@ -111,6 +112,7 @@ bool setLiftCmd(LiftState cmd) {
 	if (!isLiftReady()) {
 		return false;
 	}
+	liftAtTarget = false;
 	liftCmd = cmd;
 	return true;
 }
@@ -140,12 +142,16 @@ task Lift() {
 
 	// Run forever
 	while (true) {
-		
+
+		nxtDisplayBigTextLine(1, "%d %d", (int)liftCmd, readLiftEncoder());
+
 		// When reset is commanded ignore everything else until we are ready
 		if (liftCmd == RESET) {
 			while (!readLiftTouch()) {
-				driveLift(-100);
+				nxtDisplayBigTextLine(1, "Reset %d", readLiftTouch());
+				driveLift(-LIFT_SPEED);
 			}
+			nxtDisplayBigTextLine(1, "Ready");
 			stopLift();
 			resetLiftEncoder();
 			liftCmd = COLLECT;
@@ -175,43 +181,36 @@ task Lift() {
 			case HIGH:
 				liftCmdHeight = LIFT_HEIGHT_HIGH;
 				break;
-				
+
+			case RESET:
+				break;
+
 			// If we get here something bad happened
 			// Stop the lift and exit the task
 			default:
-				liftFatalErr("Cmd");
+				liftFatalErr();
 				// liftFatalErr should never return, but for clarity:
 				break;
 		}
-		
-		// Calculate the difference between the current lift height and the desired lift height		
+
+		// Calculate the difference between the current lift height and the desired lift height
 		int liftErr = liftCmdHeight - readLiftEncoder();
-		int liftErrAbs = abs(liftHeightErr);
-		
+		int liftErrAbs = abs(liftErr);
+
 		// In theory we can do this and let the motor controller deal with the details
 		#ifdef LIFT_REMOTE_PID
 			if (liftErrAbs >= LIFT_DEAD_ZONE) {
-				driveLiftTarget(LIFT_SPEED, liftCmdHeight);			
+				driveLiftTarget(LIFT_SPEED, liftCmdHeight);
 			}
-			
-			// Detect stalls and acknowledge remote PID completion
-			switch(liftTargetState()) {
-				
-				// Something went wrong -- likely a motor stall
-				case runStateHoldPosition:
-					liftFatalErr("Stall");
-					// liftFatalErr should never return, but for clarity:
-					// Intentional fall-through
-				
-				// Acknowledge the current PID run is complete	
-				case runStateIdle:
+
+			// Acknowledge remote PID completion
+			if (liftTargetState() == runStateIdle) {
 					stopLift();
-					break;
 			}
-			
+
 		// But in case that does not work
 		#else
-		
+
 			// Calculate a lift speed based on the magnitude of the lift height error
 			int liftSpeed = 0;
 			if (liftErrAbs < LIFT_DEAD_ZONE) {
@@ -225,17 +224,17 @@ task Lift() {
 				// This is the "P" of PID. We may also need an "I".
 				liftSpeed = ((LIFT_FULL_ERR - liftErrAbs) * LIFT_SPEED) / LIFT_FULL_ERR;
 			}
-		
+
 			// Invert the lift speed if the lift should move down
 			if (liftErr < 0) {
 				liftSpeed *= -1;
 			}
-			
+
 			// Drive the lift and loop
 			driveLift(liftSpeed);
-		
+
 		#endif
-		
+
 		// Note when we're on-target for outside observers
 		if (liftErrAbs < LIFT_DEAD_ZONE) {
 			liftAtTarget = true;
