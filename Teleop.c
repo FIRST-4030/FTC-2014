@@ -1,9 +1,9 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  none)
 #pragma config(Hubs,  S3, HTServo,  none,     none,     none)
-#pragma config(Sensor, S1,     motors,         sensorI2CMuxController)
+#pragma config(Sensor, S1,     motors,         sensorNone)
 #pragma config(Sensor, S2,     SMUX,           sensorI2CCustom9V)
-#pragma config(Sensor, S3,     servos,         sensorI2CMuxController)
-#pragma config(Sensor, S4,     gyroSensor,     sensorI2CHiTechnicGyro)
+#pragma config(Sensor, S3,     servos,         sensorNone)
+#pragma config(Sensor, S4,     liftTS,         sensorTouch)
 #pragma config(Motor,  motorA,           ,             tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  motorB,           ,             tmotorNXT, openLoop, reversed, encoder)
 #pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop, encoder)
@@ -11,7 +11,7 @@
 #pragma config(Motor,  mtr_S1_C1_2,     leftRearMotor, tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     rightFrontMotor, tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     rightRearMotor, tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C3_1,     liftMotor,     tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_1,     liftMotor,     tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C3_2,     spinnerMotor,  tmotorTetrix, openLoop, encoder)
 #pragma config(Servo,  srvo_S3_C1_1,    goalHook,             tServoStandard)
 #pragma config(Servo,  srvo_S3_C1_2,    hopperTilt,           tServoStandard)
@@ -30,6 +30,7 @@ task main()
   waitForStart();
 
   StartTask(DriveMec);
+  StartTask(Lift);
 
   bool pressedSix = false;
   bool spinnerIn = false;
@@ -37,8 +38,8 @@ task main()
 	while(true)
 	{
 		getJoystickSettings(joystick);
-		int encoder = readDriveEncoder();
-		int ir = readIR();
+		//int encoder = readDriveEncoder();
+		//int ir = readIR();
 
 		//Goal Hook Servo
 		if(joy1Btn(7) || joy1Btn(8)) {
@@ -55,22 +56,25 @@ task main()
 			pressedSix = false;
 			spinnerIn = !spinnerIn;
 		}
-
 		if(spinnerIn) {
 			DriveSpinnerMotor(SPINNER_IN);
 		} else {
 			StopSpinnerMotor();
 		}
 
-		if(joy2Btn(1)) {
-			motor[liftMotor] = 50;
+		if (joy2Btn(1) && joy2Btn(2)) {
+			liftReset();
+		} else if (joy2Btn(3) && joy2Btn(4)) {
+			setLiftCmd(HIGH);
+		} else if(joy2Btn(1)) {
+			setLiftCmd(COLLECT);
 		} else if(joy2Btn(2)) {
-			motor[liftMotor] = -50;
-		} else {
-			motor[liftMotor] = 0;
+			setLiftCmd(DRIVE);
+		} else if(joy2Btn(3)) {
+			setLiftCmd(LOW);
+		} else if(joy2Btn(4)) {
+			setLiftCmd(MED);
 		}
-
-		nxtDisplayBigTextLine(1, "%d", nMotorEncoder[liftMotor]);
 
 		//Tilting Hopper Servo
 		if(joystick.joy2_TopHat == 0) {
