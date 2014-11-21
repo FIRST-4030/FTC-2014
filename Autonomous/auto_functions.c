@@ -24,7 +24,7 @@ void AutoKickstand() {
 
 	//Move to the side, turn, move forward and hit kickstand
 	initIR(MidIRSeeker);
-	driveToIR(-100, false, false, 6);
+	driveToIR(100, false, false, 4);
 	driveToGyro(90, true);
 	driveToEncoder(100, 2000);
 }
@@ -35,7 +35,7 @@ void AutoScoreAhead() {
 
 	//Center on IR beacon
 	initIR(MidIRSeeker);
-	driveToIR(-100, false, false, 5);
+	driveToIR(100, false, false, 5);
 
 	//Turn to line up with the goal
 	driveToGyro(90, true);
@@ -66,15 +66,15 @@ void AutoScoreIntermediate() {
 }
 
 void AutoScoreSide() {
-	//Turn right, drive far out, and turn back
-	driveToGyro(45, false);
+	//Turn left, drive far out, and turn back
+	driveToGyro(45, true);
 	//Center on IR beacon
 	initIR(IRSeeker);
-	driveToIR(100, false, false, 1);
+	driveToIR(100, false, false, 9);
 
 	//Turn out to determine direction
 	initIR(MidIRSeeker);
-	driveToIR(100, true, false, 5);
+	driveToIR(-100, true, false, 5);
 
 	//Knowing direction, reliably turn to face the goal
 	driveToGyro(90, true);

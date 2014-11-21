@@ -34,9 +34,9 @@ task main()
   int testIR = readMidIR();
   if(ir == 0 || testIR == 0) {
   	//Need some failsafe code in case the ir sensor is broken/unplugged
-  }else if(ir == 3) {
+  }else if(ir == 7) {
   	AutoScoreAhead();
-  } else if(ir == 4) {
+  } else if(ir == 6) {
   	AutoScoreIntermediate();
 	} else if(ir == 5) {
 		AutoScoreSide();
