@@ -41,7 +41,6 @@ task main()
 	} else if(ir == 5) {
 		AutoScoreSide();
 	}
-  //AutoKickstandAhead();
   StopTask(gyro);
   while (true) {
   	wait1Msec(100);
