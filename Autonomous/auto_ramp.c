@@ -1,9 +1,9 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  none)
 #pragma config(Hubs,  S3, HTServo,  none,     none,     none)
-#pragma config(Sensor, S1,     motors,         sensorI2CMuxController)
+#pragma config(Sensor, S1,     motors,         sensorNone)
 #pragma config(Sensor, S2,     SMUX,           sensorI2CCustom9V)
-#pragma config(Sensor, S3,     servos,         sensorI2CMuxController)
-#pragma config(Sensor, S4,     gyroSensor,     sensorI2CHiTechnicGyro)
+#pragma config(Sensor, S3,     servos,         sensorNone)
+#pragma config(Sensor, S4,     liftTS,         sensorTouch)
 #pragma config(Motor,  motorA,           ,             tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  motorB,           ,             tmotorNXT, openLoop, reversed, encoder)
 #pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop, encoder)
@@ -27,11 +27,14 @@
 task main()
 {
   initializeRobot();
+  waitForStart();
+
   StartTask(gyro);
-  driveToEncoder(100, 3000);
+  StartTask(Lift);
+
+  wait10Msec(100);
+  setWaitLiftCmd(DRIVE);
+  wait10Msec(100);
+  driveToEncoder(-100, -5500);
   StopTask(gyro);
-  while (true) {
-  	wait1Msec(100);
-  	ir = ir;
-  }
 }

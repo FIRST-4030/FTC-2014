@@ -26,6 +26,7 @@
 
 void stopAndDump(LiftState cmd) {
 	StopTask(DriveMec);
+	stopDriveMotors();
 	setWaitLiftCmd(cmd);
 	SetHopperServo(HOPPER_MIN);
 	wait1Msec(3 * 1000);
@@ -42,47 +43,28 @@ task main()
   StartTask(DriveMec);
   StartTask(Lift);
 
-  bool pressedSix = false;
-  bool spinnerIn = false;
+  DriveSpinnerMotor(SPINNER_IN);
 
 	while(true)
 	{
 		getJoystickSettings(joystick);
-		//int encoder = readDriveEncoder();
-		//int ir = readIR();
 
 		//Goal Hook Servo
-		if(joy1Btn(7) || joy1Btn(8)) {
+		if(joy1Btn(5)) {
 			SetHookServo(HOOK_MAX);
-		} else if (joy1Btn(5) || joy1Btn(6)) {
+		} else if (joy1Btn(6)) {
 			SetHookServo(HOOK_MIN);
 		}
 
-		//Spinner Motor
-		if(joy2Btn(6))
-			pressedSix = true;
-
-		if(pressedSix && !joy2Btn(6)) {
-			pressedSix = false;
-			spinnerIn = !spinnerIn;
-		}
-		if(spinnerIn) {
-			DriveSpinnerMotor(SPINNER_IN);
-		} else {
-			StopSpinnerMotor();
-		}
-
-		if (joy2Btn(1) && joy2Btn(2)) {
-			liftReset();
-		} else if (joy2Btn(3) && joy2Btn(4)) {
+		if (joy2Btn(4)) {
 			stopAndDump(HIGH);
-		} else if(joy2Btn(1)) {
+		} else if(joy2Btn(7)) {
 			setLiftCmd(COLLECT);
-		} else if(joy2Btn(2)) {
+		} else if(joy2Btn(8)) {
 			setLiftCmd(DRIVE);
-		} else if(joy2Btn(3)) {
+		} else if(joy2Btn(2)) {
 			stopAndDump(LOW);
-		} else if(joy2Btn(4)) {
+		} else if(joy2Btn(1) || joy2Btn(3)) {
 			stopAndDump(MED);
 		}
 	}

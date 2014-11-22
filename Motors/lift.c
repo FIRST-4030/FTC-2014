@@ -7,9 +7,9 @@
 
 #define LIFT_HEIGHT_COLLECT (10)
 #define LIFT_HEIGHT_DRIVE (1000)
-#define LIFT_HEIGHT_LOW (5000)
+#define LIFT_HEIGHT_LOW (6000)
 #define LIFT_HEIGHT_MED (10000)
-#define LIFT_HEIGHT_HIGH (13000)
+#define LIFT_HEIGHT_HIGH (14000)
 
 // Define to use the Tetrix PID system
 // Clear to use our local PID system
