@@ -12,13 +12,14 @@ const tMUXSensor lightLeft = msensor_S2_4;
 
 // Teleop Includes
 #include "JoystickDriver.c"
-#include "Motors/servos.c"
-#include "Motors/motors.c"
-#include "Motors/lift.c"
 #include "Sensors/gyro.c"
 #include "Sensors/ir.c"
 #include "Sensors/touch.c"
 #include "Sensors/sonar.c"
+#include "Sensors/light.c"
+#include "Motors/servos.c"
+#include "Motors/motors.c"
+#include "Motors/lift.c"
 #include "Drive/drive.c"
 #include "Drive/drive_direct.c"
 #include "Drive/drive_tank.c"

@@ -50,10 +50,12 @@ task main()
 		getJoystickSettings(joystick);
 
 		//Goal Hook Servo
-		if(joy1Btn(5)) {
+		if(joy1Btn(5) || joy1Btn(7)) {
 			SetHookServo(HOOK_MAX);
-		} else if (joy1Btn(6)) {
+			LSsetActive(lightLeft);
+		} else if (joy1Btn(6) || joy1Btn(8)) {
 			SetHookServo(HOOK_MIN);
+			LSsetInactive(lightLeft);
 		}
 
 		if (joy2Btn(4)) {

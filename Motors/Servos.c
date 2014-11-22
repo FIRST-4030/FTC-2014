@@ -32,6 +32,7 @@ void servosInit(TServoIndex hook, TServoIndex hopper) {
 	servoHook = hook;
 	servoChangeRate[servoHook] = HOOK_RATE;
 	SetHookServo(HOOK_MIN);
+	LSsetInactive(lightLeft);
 
 	servoHopper = hopper;
 	servoChangeRate[hopper] = HOPPER_RATE;
