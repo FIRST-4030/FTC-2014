@@ -29,11 +29,10 @@ task main()
   initializeRobot();
   waitForStart();
 
-  StartTask(gyro);
   StartTask(Lift);
 
   waitLiftReady();
   setWaitLiftCmd(DRIVE);
-  driveToEncoder(-100, -5500);
-  StopTask(gyro);
+  driveToEncoder(AUTO_DRIVE_SPEED, 5500);
+  setLiftCmd(COLLECT);
 }
