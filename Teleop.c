@@ -51,11 +51,9 @@ task main()
 
 		//Goal Hook Servo
 		if(joy1Btn(5) || joy1Btn(7)) {
-			SetHookServo(HOOK_MAX);
-			LSsetActive(lightLeft);
+			servoHookCapture();
 		} else if (joy1Btn(6) || joy1Btn(8)) {
-			SetHookServo(HOOK_MIN);
-			LSsetInactive(lightLeft);
+			servoHookRelease();
 		}
 
 		if (joy2Btn(4)) {

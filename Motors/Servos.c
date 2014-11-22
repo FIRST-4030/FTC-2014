@@ -10,6 +10,7 @@
 
 TServoIndex servoHook;
 TServoIndex servoHopper;
+tMUXSensor servoLight;
 
 void setServo(TServoIndex s, int position, int min = 0, int max = 255) {
 	if (position > max) {
@@ -28,11 +29,21 @@ void SetHopperServo (int position, int min = HOPPER_MIN, int max = HOPPER_MAX) {
 	setServo(servoHopper, position, min, max);
 }
 
-void servosInit(TServoIndex hook, TServoIndex hopper) {
+void servoHookCapture() {
+	SetHookServo(HOOK_MAX);
+	LSsetActive(lightLeft);
+}
+
+void servoHookRelease() {
+	SetHookServo(HOOK_MIN);
+	LSsetInactive(servoLight);
+}
+
+void servosInit(TServoIndex hook, TServoIndex hopper, tMUXSensor light) {
 	servoHook = hook;
 	servoChangeRate[servoHook] = HOOK_RATE;
-	SetHookServo(HOOK_MIN);
-	LSsetInactive(lightLeft);
+	servoLight = light;
+	servoHookRelease();
 
 	servoHopper = hopper;
 	servoChangeRate[hopper] = HOPPER_RATE;
