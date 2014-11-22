@@ -1,8 +1,8 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  none)
 #pragma config(Hubs,  S3, HTServo,  none,     none,     none)
-#pragma config(Sensor, S1,     motors,         sensorNone)
+#pragma config(Sensor, S1,     motors,         sensorI2CMuxController)
 #pragma config(Sensor, S2,     SMUX,           sensorI2CCustom9V)
-#pragma config(Sensor, S3,     servos,         sensorNone)
+#pragma config(Sensor, S3,     servos,         sensorI2CMuxController)
 #pragma config(Sensor, S4,     liftTS,         sensorTouch)
 #pragma config(Motor,  motorA,           ,             tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  motorB,           ,             tmotorNXT, openLoop, reversed, encoder)
@@ -11,8 +11,8 @@
 #pragma config(Motor,  mtr_S1_C1_2,     leftRearMotor, tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     rightFrontMotor, tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     rightRearMotor, tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C3_1,     spinnerMotor,  tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C3_2,     liftMotor,     tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C3_1,     liftMotor,     tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_2,     spinnerMotor,  tmotorTetrix, openLoop, encoder)
 #pragma config(Servo,  srvo_S3_C1_1,    goalHook,             tServoStandard)
 #pragma config(Servo,  srvo_S3_C1_2,    hopperTilt,           tServoStandard)
 #pragma config(Servo,  srvo_S3_C1_3,    unusedS3C13,          tServoStandard)
@@ -32,9 +32,8 @@ task main()
   StartTask(gyro);
   StartTask(Lift);
 
-  wait10Msec(100);
+  waitLiftReady();
   setWaitLiftCmd(DRIVE);
-  wait10Msec(100);
   driveToEncoder(-100, -5500);
   StopTask(gyro);
 }
