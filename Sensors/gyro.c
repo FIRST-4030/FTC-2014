@@ -48,6 +48,7 @@ task gyro() {
 		}
 		GYRO_ANGLE += speed * ((float)GYRO_PERIOD / 1000.0);
 		GYRO_READY = true;
+		nxtDisplayBigTextLine(3, "%d", (int)GYRO_ANGLE);
 	}
 }
 
