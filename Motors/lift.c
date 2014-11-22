@@ -139,6 +139,8 @@ bool setWaitLiftCmd(LiftState cmd) {
 }
 
 task Lift() {
+	//For fail-safe code, could be inverted if needed
+	int liftSpeed = LIFT_SPEED;
 
 	// Run forever
 	while (true) {
@@ -147,9 +149,18 @@ task Lift() {
 
 		// When reset is commanded ignore everything else until we are ready
 		if (liftCmd == RESET) {
+			int resetTime = 4;
+			ClearTimer(T1);
 			while (!readLiftTouch()) {
 				nxtDisplayBigTextLine(1, "Reset %d", readLiftTouch());
-				driveLift(-LIFT_SPEED);
+				driveLift(-liftSpeed);
+				//Fail-safe, originally wait four seconds to see if lift is wound wrong way
+				if(time1[T1] > resetTime * 1000) {
+					//Invert lift direction and wait eight seconds to see if the lift is properly reset
+					liftSpeed = -liftSpeed;
+					resetTime = 8;
+					ClearTimer(T1);
+				}
 			}
 			nxtDisplayBigTextLine(1, "Ready");
 			stopLift();
@@ -200,7 +211,7 @@ task Lift() {
 		// In theory we can do this and let the motor controller deal with the details
 		#ifdef LIFT_REMOTE_PID
 			if (liftErrAbs >= LIFT_DEAD_ZONE) {
-				driveLiftTarget(LIFT_SPEED, liftCmdHeight);
+				driveLiftTarget(liftSpeed, liftCmdHeight);
 			}
 
 			// Acknowledge remote PID completion
@@ -222,7 +233,7 @@ task Lift() {
 			} else {
 				// More slowly as we approach the target
 				// This is the "P" of PID. We may also need an "I".
-				liftSpeed = ((LIFT_FULL_ERR - liftErrAbs) * LIFT_SPEED) / LIFT_FULL_ERR;
+				liftSpeed = ((LIFT_FULL_ERR - liftErrAbs) * liftSpeed) / LIFT_FULL_ERR;
 			}
 
 			// Invert the lift speed if the lift should move down
