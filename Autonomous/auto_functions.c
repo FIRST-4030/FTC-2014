@@ -5,17 +5,20 @@
 // Put functions here which do specific actions on the robot. //
 
 #define AUTO_DRIVE_SPEED (-100)
+#define IR_MID (5)
+#define IR_LEFT_SIDE (1)
+#define IR_RIGHT_SIDE (9)
 
 void AutoScore() {
 	//Drive forward into center goal
 	initIR(MidIRSeeker);
-	driveToIR(100, false, false, 0);
+	driveToIR(AUTO_DRIVE_SPEED, false, false, 0);
 	resetDriveEncoder();
-	driveToEncoder(100, 500); //Note: 500 is a guessed value
+	driveToEncoder(AUTO_DRIVE_SPEED, 500); //Note: 500 is a guessed value
 
 	//Back up
 	resetDriveEncoder();
-	driveToEncoder(-100, -500); //-500 is also a guessed value
+	driveToEncoder(-AUTO_DRIVE_SPEED, 500); //also a guessed value
 }
 
 void AutoKickstand() {
@@ -24,21 +27,21 @@ void AutoKickstand() {
 
 	//Move to the side, turn, move forward and hit kickstand
 	initIR(MidIRSeeker);
-	driveToIR(100, false, false, 4);
+	driveToIR(AUTO_DRIVE_SPEED, false, false, IR_MID - 1);
 	driveToGyro(90, true);
-	driveToEncoder(100, 2000);
+	driveToEncoder(AUTO_DRIVE_SPEED, 2000);
 }
 
 void AutoScoreAhead() {
 	//Turn to line up side sensor
-	driveToGyro(90, true);
+	driveToGyro(90, false);
 
 	//Center on IR beacon
 	initIR(MidIRSeeker);
-	driveToIR(100, false, false, 5);
+	driveToIR(AUTO_DRIVE_SPEED, false, false, IR_MID);
 
 	//Turn to line up with the goal
-	driveToGyro(90, true);
+	driveToGyro(90, false);
 
 	AutoScore();
 
@@ -46,19 +49,15 @@ void AutoScoreAhead() {
 }
 
 void AutoScoreIntermediate() {
-	//Center on IR beacon direction
-	initIR(IRSeeker);
-	driveToIR(-100, true, false, 5);
-
 	//Turn to line up side sensor
-	driveToGyro(90, true);
+	driveToGyro(135, false);
 
 	//Center on IR beacon
 	initIR(MidIRSeeker);
-	driveToIR(100, false, false, 5);
+	driveToIR(-AUTO_DRIVE_SPEED, false, false, IR_MID);
 
 	//Turn to line up with the goal
-	driveToGyro(90, true);
+	driveToGyro(90, false);
 
 	AutoScore();
 
@@ -70,73 +69,15 @@ void AutoScoreSide() {
 	driveToGyro(45, true);
 	//Center on IR beacon
 	initIR(IRSeeker);
-	driveToIR(100, false, false, 9);
+	driveToIR(AUTO_DRIVE_SPEED, false, false, IR_RIGHT_SIDE);
 
 	//Turn out to determine direction
-	initIR(MidIRSeeker);
-	driveToIR(-100, true, false, 5);
-
-	//Knowing direction, reliably turn to face the goal
-	driveToGyro(90, true);
+	initIR(IRSeeker);
+	driveToIR(-AUTO_DRIVE_SPEED, true, false, IR_MID + 1);
 
 	AutoScore();
 
 	AutoKickstand();
-}
-
-/*
-// Assuming a start position parallel to the goal, back up and score
-void AutoScore() {
-	//drive backwards until IR is in view
-	driveToIR(AUTO_DRIVE_SPEED, false, false, 1);
-	//drive backwards until we're at an angle we can score from
-	driveToEncoder(-AUTO_DRIVE_SPEED, 200);
-	//turn facing IR
-	driveToIR(AUTO_DRIVE_SPEED, false, false, 5);
-	//Drive until ball is in goal
-	// Not implemented -- driveToTouch(AUTO_DRIVE_SPEED, TS_index);
-}
-*/
-
-void AutoKickstandAhead() {
-	// Hit the kickstand
-	driveToEncoder(AUTO_DRIVE_SPEED, 4500);
-	wait1Msec(1000 * 2);
-	// Back up to avoid hitting the goal
-	driveToEncoder(-AUTO_DRIVE_SPEED, -500);
-	wait1Msec(1000 * 2);
-	// Turn to align with the goal
-	driveToGyro(90, false);
-
-	// Disabled for the moment
-	//AutoScore();
-}
-
-void AutoKickstandIntermediate() {
-	//turn towards pole
-	driveToGyro(45, true);
-	//drive until pole is down
-	driveToEncoder(AUTO_DRIVE_SPEED, 200);
-	// Back up to avoid hitting the goal
-	driveToEncoder(-AUTO_DRIVE_SPEED, 100);
-	// Align parallel to the goal
-	driveToGyro(90, false);
-
-	AutoScore();
-}
-
-void AutoKickstandSide() {
-		// Re-align to pole position
-		driveToGyro(90, true);
-		driveToEncoder(AUTO_DRIVE_SPEED, 50);
-		driveToGyro(90, false);
-
-		// Hit the kickstand
-		driveToEncoder(AUTO_DRIVE_SPEED, 200);
-		// Align parallel to the goal
-		driveToGyro(90, false);
-
-		AutoScore();
 }
 
 #endif

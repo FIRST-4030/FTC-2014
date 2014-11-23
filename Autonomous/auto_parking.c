@@ -1,9 +1,9 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  none)
 #pragma config(Hubs,  S3, HTServo,  none,     none,     none)
-#pragma config(Sensor, S1,     motors,         sensorI2CMuxController)
+#pragma config(Sensor, S1,     motors,         sensorNone)
 #pragma config(Sensor, S2,     SMUX,           sensorI2CCustom9V)
-#pragma config(Sensor, S3,     servos,         sensorI2CMuxController)
-#pragma config(Sensor, S4,     gyroSensor,     sensorI2CHiTechnicGyro)
+#pragma config(Sensor, S3,     servos,         sensorNone)
+#pragma config(Sensor, S4,     liftTS,         sensorTouch)
 #pragma config(Motor,  motorA,           ,             tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  motorB,           ,             tmotorNXT, openLoop, reversed, encoder)
 #pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop, encoder)
@@ -29,16 +29,16 @@ task main()
   initializeRobot();
   StartTask(gyro);
   //Scouting, move out and check IR to determine field position
-  driveToEncoder(100, 2300);
+  driveToEncoder(AUTO_DRIVE_SPEED, 2300);
   int ir = readIR();
   int testIR = readMidIR();
   if(ir == 0 || testIR == 0) {
   	//Need some failsafe code in case the ir sensor is broken/unplugged
-  }else if(ir == 7) {
+  }else if(ir == IR_MID + 2) {
   	AutoScoreAhead();
-  } else if(ir == 6) {
+  } else if(ir == IR_MID + 1) {
   	AutoScoreIntermediate();
-	} else if(ir == 5) {
+	} else if(ir == IR_MID) {
 		AutoScoreSide();
 	}
   StopTask(gyro);
