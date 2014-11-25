@@ -5,6 +5,7 @@
 // Put functions here which do specific actions on the robot. //
 
 #define AUTO_DRIVE_SPEED (-100)
+#define TURN_LEFT (false)
 #define IR_MID (5)
 #define IR_LEFT_SIDE (1)
 #define IR_RIGHT_SIDE (9)
@@ -23,25 +24,25 @@ void AutoScore() {
 
 void AutoKickstand() {
 	//Turn to line up side sensor
-	driveToGyro(90, false);
+	driveToGyro(90, !TURN_LEFT);
 
 	//Move to the side, turn, move forward and hit kickstand
 	initIR(MidIRSeeker);
 	driveToIR(AUTO_DRIVE_SPEED, false, false, IR_MID - 1);
-	driveToGyro(90, true);
+	driveToGyro(90, TURN_LEFT);
 	driveToEncoder(AUTO_DRIVE_SPEED, 2000);
 }
 
 void AutoScoreAhead() {
 	//Turn to line up side sensor
-	driveToGyro(90, false);
+	driveToGyro(90, !TURN_LEFT);
 
 	//Center on IR beacon
 	initIR(MidIRSeeker);
 	driveToIR(AUTO_DRIVE_SPEED, false, false, IR_MID);
 
 	//Turn to line up with the goal
-	driveToGyro(90, false);
+	driveToGyro(90, TURN_LEFT);
 
 	AutoScore();
 
@@ -50,14 +51,14 @@ void AutoScoreAhead() {
 
 void AutoScoreIntermediate() {
 	//Turn to line up side sensor
-	driveToGyro(135, false);
+	driveToGyro(135, !TURN_LEFT);
 
 	//Center on IR beacon
 	initIR(MidIRSeeker);
 	driveToIR(-AUTO_DRIVE_SPEED, false, false, IR_MID);
 
 	//Turn to line up with the goal
-	driveToGyro(90, false);
+	driveToGyro(90, !TURN_LEFT);
 
 	AutoScore();
 
@@ -66,7 +67,7 @@ void AutoScoreIntermediate() {
 
 void AutoScoreSide() {
 	//Turn left, drive far out, and turn back
-	driveToGyro(45, true);
+	driveToGyro(45, TURN_LEFT);
 	//Center on IR beacon
 	initIR(IRSeeker);
 	driveToIR(AUTO_DRIVE_SPEED, false, false, IR_RIGHT_SIDE);
