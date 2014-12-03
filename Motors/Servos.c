@@ -3,10 +3,10 @@
 
 #define HOOK_MIN (75)
 #define HOOK_MAX (160)
-#define HOOK_RATE 2
+#define HOOK_RATE 0
 #define HOPPER_MAX (220)
 #define HOPPER_MIN (50)
-#define HOPPER_RATE 2
+#define HOPPER_RATE 0
 
 TServoIndex servoHook;
 TServoIndex servoHopper;
@@ -30,12 +30,12 @@ void SetHopperServo (int position, int min = HOPPER_MIN, int max = HOPPER_MAX) {
 }
 
 void servoHookCapture() {
-	SetHookServo(HOOK_MAX);
-	LSsetActive(lightLeft);
+	SetHookServo(HOOK_MIN);
+	LSsetActive(servoLight);
 }
 
 void servoHookRelease() {
-	SetHookServo(HOOK_MIN);
+	SetHookServo(HOOK_MAX);
 	LSsetInactive(servoLight);
 }
 
