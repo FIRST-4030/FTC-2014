@@ -6,7 +6,7 @@
 const tMUXSensor sonarSensor = msensor_S2_1;
 const tMUXSensor MidIRSeeker = msensor_S2_1;
 const tMUXSensor IRSeeker = msensor_S2_2;
-const tMUXSensor gyroSensor = msensor_S2_3;
+//const tMUXSensor gyroSensor = msensor_S2_3;
 const tMUXSensor lightRight = msensor_S2_3;
 const tMUXSensor lightLeft = msensor_S2_4;
 

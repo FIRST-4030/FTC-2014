@@ -3,7 +3,7 @@
 
 #include "../drivers/hitechnic-gyro.h"
 
-#define GYRO_OVERRUN (5)
+#define GYRO_OVERRUN (9)
 #define GYRO_PERIOD (10)
 #define GYRO_FLOAT_SPEED (10.0)
 #define GYRO_CAL_SAMPLES (25)
@@ -48,7 +48,6 @@ task gyro() {
 		}
 		GYRO_ANGLE += speed * ((float)GYRO_PERIOD / 1000.0);
 		GYRO_READY = true;
-		nxtDisplayBigTextLine(3, "%d", (int)GYRO_ANGLE);
 	}
 }
 
