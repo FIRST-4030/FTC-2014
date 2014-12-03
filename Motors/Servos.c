@@ -1,8 +1,8 @@
 #ifndef FTC_SERVOS
 #define FTC_SERVOS
 
-#define HOOK_MIN (120)
-#define HOOK_MAX (240)
+#define HOOK_MIN (75)
+#define HOOK_MAX (160)
 #define HOOK_RATE 2
 #define HOPPER_MAX (220)
 #define HOPPER_MIN (50)
