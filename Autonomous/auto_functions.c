@@ -12,13 +12,12 @@
 
 void AutoScore() {
 	//Drive forward into center goal
-	initIR(MidIRSeeker);
 	driveToIR(AUTO_DRIVE_SPEED, false, false, 0);
-	resetDriveEncoder();
 	driveToEncoder(AUTO_DRIVE_SPEED, 500); //Note: 500 is a guessed value
 
+	//insert dumping routine//
+
 	//Back up
-	resetDriveEncoder();
 	driveToEncoder(-AUTO_DRIVE_SPEED, 500); //also a guessed value
 }
 
@@ -27,15 +26,13 @@ void AutoKickstand() {
 	driveToGyro(90, !TURN_LEFT);
 
 	//Move to the side, turn, move forward and hit kickstand
-	initIR(MidIRSeeker);
-	driveToIR(AUTO_DRIVE_SPEED, false, false, IR_MID - 1);
+	driveToIR(AUTO_DRIVE_SPEED, false, false, IR_MID - 2);
 	driveToGyro(90, TURN_LEFT);
 	driveToEncoder(AUTO_DRIVE_SPEED, 2000);
 }
 
 void AutoScoreAhead() {
 	driveToGyro(40, !TURN_LEFT);
-	initIR(IRSeeker);
 	driveToEncoder(AUTO_DRIVE_SPEED, 2000);
 	driveToGyro(80, TURN_LEFT);
 	wait1Msec(3 * 1000);
@@ -49,16 +46,6 @@ void AutoScoreAhead() {
 	while(true) {
 		readIR();
 	}
-	/*
-	//Turn to line up side sensor
-	driveToGyro(90, !TURN_LEFT);
-
-	//Center on IR beacon
-	initIR(MidIRSeeker);
-	driveToIR(AUTO_DRIVE_SPEED, false, false, IR_MID);
-
-	//Turn to line up with the goal
-	driveToGyro(90, TURN_LEFT);*/
 
 	//AutoScore();
 
@@ -66,20 +53,7 @@ void AutoScoreAhead() {
 }
 
 void AutoScoreIntermediate() {
-	initIR(IRSeeker);
 	driveToIR(AUTO_DRIVE_SPEED, true, false, IR_MID);
-
-/*
-	//Turn to line up side sensor
-	driveToGyro(135, !TURN_LEFT);
-
-	//Center on IR beacon
-	initIR(MidIRSeeker);
-	driveToIR(-AUTO_DRIVE_SPEED, false, false, IR_MID);
-
-	//Turn to line up with the goal
-	driveToGyro(90, !TURN_LEFT);
-	*/
 
 	//AutoScore();
 
@@ -90,7 +64,6 @@ void AutoScoreSide() {
 	//Turn left, drive far out, and turn back
 	driveToGyro(45, TURN_LEFT);
 	//Center on IR beacon
-	initIR(IRSeeker);
 	driveToIR(AUTO_DRIVE_SPEED, false, false, IR_RIGHT_SIDE);
 
 	driveToGyro(70, !TURN_LEFT);

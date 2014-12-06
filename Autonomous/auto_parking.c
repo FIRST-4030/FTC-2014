@@ -33,7 +33,6 @@ task main()
   int ir = readIR();
 
   if(ir == 5) {
-  	//AutoScoreSide
   	AutoScoreSide();
   } else {
 	  driveToGyro(90, !TURN_LEFT);
