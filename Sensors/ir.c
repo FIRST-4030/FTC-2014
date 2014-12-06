@@ -4,6 +4,7 @@
 #include "../drivers/hitechnic-irseeker-v2.h"
 
 int readIR() {
+	nxtDisplayCenteredBigTextLine(1, "%d", HTIRS2readACDir(IRSeeker));
 	return HTIRS2readACDir(IRSeeker);
 }
 

@@ -34,6 +34,22 @@ void AutoKickstand() {
 }
 
 void AutoScoreAhead() {
+	driveToGyro(40, !TURN_LEFT);
+	initIR(IRSeeker);
+	driveToEncoder(AUTO_DRIVE_SPEED, 2000);
+	driveToGyro(80, TURN_LEFT);
+	wait1Msec(3 * 1000);
+	readIR();
+	bool abort = !driveToIR(AUTO_DRIVE_SPEED, true, false, 6);
+
+	if(abort) {
+		FlashLights(1, 5 * 1000);
+	}
+
+	while(true) {
+		readIR();
+	}
+	/*
 	//Turn to line up side sensor
 	driveToGyro(90, !TURN_LEFT);
 
@@ -42,14 +58,18 @@ void AutoScoreAhead() {
 	driveToIR(AUTO_DRIVE_SPEED, false, false, IR_MID);
 
 	//Turn to line up with the goal
-	driveToGyro(90, TURN_LEFT);
+	driveToGyro(90, TURN_LEFT);*/
 
-	AutoScore();
+	//AutoScore();
 
-	AutoKickstand();
+	//AutoKickstand();
 }
 
 void AutoScoreIntermediate() {
+	initIR(IRSeeker);
+	driveToIR(AUTO_DRIVE_SPEED, true, false, IR_MID);
+
+/*
 	//Turn to line up side sensor
 	driveToGyro(135, !TURN_LEFT);
 
@@ -59,10 +79,11 @@ void AutoScoreIntermediate() {
 
 	//Turn to line up with the goal
 	driveToGyro(90, !TURN_LEFT);
+	*/
 
-	AutoScore();
+	//AutoScore();
 
-	AutoKickstand();
+	//AutoKickstand();
 }
 
 void AutoScoreSide() {
@@ -72,13 +93,13 @@ void AutoScoreSide() {
 	initIR(IRSeeker);
 	driveToIR(AUTO_DRIVE_SPEED, false, false, IR_RIGHT_SIDE);
 
+	driveToGyro(70, !TURN_LEFT);
 	//Turn out to determine direction
-	initIR(IRSeeker);
 	driveToIR(-AUTO_DRIVE_SPEED, true, false, IR_MID + 1);
 
-	AutoScore();
+	//AutoScore();
 
-	AutoKickstand();
+	//AutoKickstand();
 }
 
 #endif
