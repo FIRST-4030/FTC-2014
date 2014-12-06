@@ -21,7 +21,7 @@ void initializeRobot() {
 
 	// Set servo rates and start positions
 	#ifdef FTC_SERVOS
-	servosInit(goalHook, hopperTilt, lightLeft);
+	servosInit(goalHook, hopperTilt, lightLeft, highGoal);
 	#endif
 }
 

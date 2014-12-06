@@ -14,7 +14,7 @@
 #pragma config(Motor,  mtr_S1_C3_2,     spinnerMotor,  tmotorTetrix, openLoop, encoder)
 #pragma config(Servo,  srvo_S1_C4_1,    goalHook,             tServoStandard)
 #pragma config(Servo,  srvo_S1_C4_2,    hopperTilt,           tServoStandard)
-#pragma config(Servo,  srvo_S1_C4_3,    unusedS3C13,          tServoStandard)
+#pragma config(Servo,  srvo_S1_C4_3,    highGoal,             tServoStandard)
 #pragma config(Servo,  srvo_S1_C4_4,    unusedS3C14,          tServoStandard)
 #pragma config(Servo,  srvo_S1_C4_5,    unusedS3C15,          tServoStandard)
 #pragma config(Servo,  srvo_S1_C4_6,    unusedS3C16,          tServoStandard)

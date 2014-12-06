@@ -3,13 +3,17 @@
 
 #define HOOK_MIN (75)
 #define HOOK_MAX (160)
-#define HOOK_RATE 0
+#define HOOK_RATE (0)
 #define HOPPER_MAX (220)
 #define HOPPER_MIN (50)
-#define HOPPER_RATE 0
+#define HOPPER_RATE (0)
+#define HIGH_MIN (110)
+#define HIGH_MAX (200)
+#define HIGH_RATE (2)
 
 TServoIndex servoHook;
 TServoIndex servoHopper;
+TServoIndex servoHigh;
 tMUXSensor servoLight;
 
 void setServo(TServoIndex s, int position, int min = 0, int max = 255) {
@@ -39,15 +43,31 @@ void servoHookRelease() {
 	LSsetInactive(servoLight);
 }
 
-void servosInit(TServoIndex hook, TServoIndex hopper, tMUXSensor light) {
+void servoSetHigh(int position) {
+	setServo(servoHigh, position, HIGH_MIN, HIGH_MAX);
+}
+
+void servoHighHold() {
+	servoSetHigh(HIGH_MAX);
+}
+
+void servoHighDrop() {
+	servoSetHigh(HIGH_MIN);
+}
+
+void servosInit(TServoIndex hook, TServoIndex hopper, tMUXSensor light, TServoIndex high) {
 	servoHook = hook;
 	servoChangeRate[servoHook] = HOOK_RATE;
 	servoLight = light;
 	servoHookRelease();
 
 	servoHopper = hopper;
-	servoChangeRate[hopper] = HOPPER_RATE;
+	servoChangeRate[servoHopper] = HOPPER_RATE;
 	SetHopperServo(HOPPER_MAX);
+
+	servoHigh = high;
+	servoChangeRate[servoHigh];
+	servoHighHold();
 }
 
 #endif
