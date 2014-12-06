@@ -26,11 +26,19 @@ void setServo(TServoIndex s, int position, int min = 0, int max = 255) {
 	servo[s] = position;
 }
 
+int getServo(TServoIndex s) {
+	return ServoValue[s];
+}
+
 void SetHookServo (int position, int min = HOOK_MIN, int max = HOOK_MAX) {
 	setServo(servoHook, position, min, max);
 }
 void SetHopperServo (int position, int min = HOPPER_MIN, int max = HOPPER_MAX) {
 	setServo(servoHopper, position, min, max);
+}
+
+int getHopperServo() {
+	return ServoValue[servoHopper];
 }
 
 void servoHookCapture() {
