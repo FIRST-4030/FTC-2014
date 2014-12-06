@@ -29,21 +29,17 @@ task main()
 {
   initializeRobot();
   waitForStart();
+
 	//For all of these, they were written with brackets [] instead of parenthesis ()//
   //I changed this, as all method calls must be with parenthesis, not brackets//
-
-  //I also changed the temporary values to much smaller things//
-  //For a general note, I tend to use values between 500-2000 simply because, if the code is accidentally run//
-  //We don't want the robot to ram into something and burn out motors. 10000 could definitely do that//
-
-  driveToEncoder(AUTO_DRIVE_SPEED, 500);
+  driveToEncoder(AUTO_DRIVE_SPEED, 5000);
 	driveToGyro(180, TURN_LEFT);
 
-	driveToEncoder(-AUTO_DRIVE_SPEED, 500);
+	driveToEncoder(-AUTO_DRIVE_SPEED, 5000);
 	servoHookCapture();
 
 	driveToGyro(120, TURN_LEFT);
-	driveToEncoder(AUTO_DRIVE_SPEED, 1000);
+	driveToEncoder(AUTO_DRIVE_SPEED, 10000);
 
 	//Stop and dump is a tele-op exclusive method//
 	//I'm currently altering the lift to automatically dump, so this can be done later//
