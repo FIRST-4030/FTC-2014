@@ -11,6 +11,8 @@
 #define GYRO_SPEED (100)
 #define SONAR_SPEED (25)
 
+#define IR_SIG_LOST (10)
+
 //Sensors to Use in 'driveTo' functions in case of multiple sensors
 tMUXSensor IR;
 

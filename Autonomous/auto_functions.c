@@ -10,42 +10,43 @@
 #define IR_LEFT_SIDE (1)
 #define IR_RIGHT_SIDE (9)
 
-void AutoScore() {
+void AutoScore(int encoder) {
 	//Drive forward into center goal
-	driveToIR(AUTO_DRIVE_SPEED, false, false, 0);
-	driveToEncoder(AUTO_DRIVE_SPEED, 500); //Note: 500 is a guessed value
+	driveToEncoder(AUTO_DRIVE_SPEED, encoder);
+	//driveToIR(AUTO_DRIVE_SPEED * 3/4, false, false, IR_SIG_LOST);
+	//driveToEncoder(AUTO_DRIVE_SPEED, 1000);
 
-	//insert dumping routine//
+	/*
+	//Raise lift to high
+	setWaitLiftCmd(HIGH);
+
+	//Dump
+	servoHighDrop();
+	wait1Msec(1 * 1000);
+	servoHighHold();
+
+	//Lower lift
+	setWaitLiftCmd(COLLECT);
+	*/
 
 	//Back up
-	driveToEncoder(-AUTO_DRIVE_SPEED, 500); //also a guessed value
+	driveToEncoder(-AUTO_DRIVE_SPEED, 500);
 }
 
 void AutoKickstand() {
 	//Turn to line up side sensor
-	driveToGyro(90, !TURN_LEFT);
+	driveToGyro(50, !TURN_LEFT);
 
 	//Move to the side, turn, move forward and hit kickstand
 	driveToIR(AUTO_DRIVE_SPEED, false, false, IR_MID - 2);
-	driveToGyro(90, TURN_LEFT);
-	driveToEncoder(AUTO_DRIVE_SPEED, 2000);
+	driveToGyro(180, TURN_LEFT);
+	driveToEncoder(-AUTO_DRIVE_SPEED, 1000);
 }
 
 void AutoScoreAhead() {
-	driveToGyro(40, !TURN_LEFT);
-	driveToEncoder(AUTO_DRIVE_SPEED, 2000);
-	driveToGyro(80, TURN_LEFT);
-	wait1Msec(3 * 1000);
-	readIR();
-	bool abort = !driveToIR(AUTO_DRIVE_SPEED, true, false, 6);
-
-	if(abort) {
-		FlashLights(1, 5 * 1000);
-	}
-
-	while(true) {
-		readIR();
-	}
+	driveToEncoder(AUTO_DRIVE_SPEED, 1600);
+	driveToIR(AUTO_DRIVE_SPEED, false, false, 4);
+	driveToGyro(90, TURN_LEFT);
 
 	//AutoScore();
 
@@ -55,7 +56,7 @@ void AutoScoreAhead() {
 void AutoScoreIntermediate() {
 	driveToIR(AUTO_DRIVE_SPEED, true, false, IR_MID);
 
-	//AutoScore();
+	AutoScore(500);
 
 	//AutoKickstand();
 }
@@ -69,10 +70,11 @@ void AutoScoreSide() {
 	driveToGyro(70, !TURN_LEFT);
 	//Turn out to determine direction
 	driveToIR(-AUTO_DRIVE_SPEED, true, false, IR_MID + 1);
+	driveToGyro(10, !TURN_LEFT);
 
-	//AutoScore();
+	AutoScore(750);
 
-	//AutoKickstand();
+	AutoKickstand();
 }
 
 #endif

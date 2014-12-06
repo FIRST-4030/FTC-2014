@@ -74,7 +74,7 @@ void servosInit(TServoIndex hook, TServoIndex hopper, tMUXSensor light, TServoIn
 	SetHopperServo(HOPPER_MAX);
 
 	servoHigh = high;
-	servoChangeRate[servoHigh];
+	servoChangeRate[servoHigh] = HIGH_RATE;
 	servoHighHold();
 }
 

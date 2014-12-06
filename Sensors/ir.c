@@ -5,6 +5,9 @@
 
 int readIR() {
 	nxtDisplayCenteredBigTextLine(1, "%d", HTIRS2readACDir(IRSeeker));
+	if(HTIRS2readACDir(IRSeeker) == 0) {
+		FlashLights(1, 1 * 1000);
+	}
 	return HTIRS2readACDir(IRSeeker);
 }
 
