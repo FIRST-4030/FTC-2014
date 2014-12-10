@@ -10,41 +10,49 @@
 #define IR_LEFT_SIDE (1)
 #define IR_RIGHT_SIDE (9)
 #define AUTO_DRIVE_SPEED_LOW (AUTO_DRIVE_SPEED * 0.2)
+#define AUTO_DRIVE_SPEED_CRAWL (AUTO_DRIVE_SPEED_LOW * 0.5)
+
+// Drive until the sonar returns *something*
+bool driveToSonarRange(int speed, int overdrive = 500, int timeout = 5000, int interval = 100) {
+	ClearTimer(T3);
+	while (time1[T3] < timeout && !readSonar()) {
+		driveToEncoder(speed, interval);
+	}
+	driveToEncoder(speed, overdrive);
+	return (bool)readSonar();
+}
 
 void AutoScore() {
 
+	// Move the lift so we get clear readings
 	setWaitLiftCmd(LOW);
-	ClearTimer(T3);
-	while (time1[T3] < 5 * 1000 && !readSonar()) {
-		driveToEncoder(AUTO_DRIVE_SPEED_LOW, 100);
-	}
-	driveToEncoder(AUTO_DRIVE_SPEED_LOW, 1000);
-	servoHookCapture();
-	wait1Msec(1 * 1000);
-	servoHookRelease();
+
+	// Drive into sonar range
+	driveToSonarRange(AUTO_DRIVE_SPEED_LOW);
+
+	// Re-algin to IR, just in case we drifted
 	if (!driveToIR(-AUTO_DRIVE_SPEED, true, false, IR_MID)) {
-		setWaitLiftCmd(MED);
+		// Bail on failure
 		return;
 	}
-	ClearTimer(T3);
-	while (time1[T3] < 3 * 1000 && readSonar() > 34) {
-		driveToEncoder(AUTO_DRIVE_SPEED_LOW, 50);
-	}
-	driveToGyro(20, TURN_LEFT);
-	ClearTimer(T3);
-	while (time1[T3] < 3 * 1000 && readSonar() > 30) {
-		driveToEncoder(AUTO_DRIVE_SPEED_LOW, 50);
-	}
 
-	// Put the lift up and dump
-	setWaitLiftCmd(HIGH);
+	// Approach the goal and turn to correct for IR offset
+	driveToSonar(AUTO_DRIVE_SPEED_LOW, 34);
+	driveToGyro(20, TURN_LEFT);
+
+	// Start the lift up and sungle in tight
+	setLiftCmd(HIGH);
+	driveToSonar(AUTO_DRIVE_SPEED_CRAWL, 30);
+
+	// Wait for the lift and dump
+	waitLiftAtTarget();
 	servoHighDrop();
 	wait1Msec(500);
 	servoHighHold();
 
 	// Return lift and back up slightly
 	setLiftCmd(COLLECT);
-	wait1Msec(500);
+	wait1Msec(1 * 1000);
 	driveToEncoder(-AUTO_DRIVE_SPEED_LOW, 500);
 	waitLiftAtTarget();
 }
@@ -86,9 +94,8 @@ void AutoScoreSide() {
 	driveToEncoder(AUTO_DRIVE_SPEED, 4000);
 	driveToGyro(130, !TURN_LEFT);
 
-	// Turn to IR alignment, then tune with the gyro
+	// Turn to IR alignment
 	if (!driveToIR(-AUTO_DRIVE_SPEED, true, false, IR_MID)) {
-		setWaitLiftCmd(MED);
 		return;
 	}
 

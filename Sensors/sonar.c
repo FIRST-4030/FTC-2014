@@ -1,6 +1,5 @@
 #ifndef FTC_SONAR
 #define FTC_SONAR
-#define SONAR_DEBUG
 
 #include "../drivers/lego-ultrasound.h"
 
