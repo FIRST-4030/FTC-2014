@@ -12,16 +12,6 @@
 #define AUTO_DRIVE_SPEED_LOW (AUTO_DRIVE_SPEED * 0.2)
 #define AUTO_DRIVE_SPEED_CRAWL (AUTO_DRIVE_SPEED_LOW * 0.5)
 
-// Drive until the sonar returns *something*
-bool driveToSonarRange(int speed, int overdrive = 500, int timeout = 5000, int interval = 100) {
-	ClearTimer(T3);
-	while (time1[T3] < timeout && !readSonar()) {
-		driveToEncoder(speed, interval);
-	}
-	driveToEncoder(speed, overdrive);
-	return (bool)readSonar();
-}
-
 void AutoScore() {
 
 	// Move the lift so we get clear readings
@@ -30,7 +20,7 @@ void AutoScore() {
 	// Drive into sonar range
 	driveToSonarRange(AUTO_DRIVE_SPEED_LOW);
 
-	// Re-algin to IR, just in case we drifted
+	// Re-align to IR, just in case we drifted
 	if (!driveToIR(-AUTO_DRIVE_SPEED, true, false, IR_MID)) {
 		// Bail on failure
 		return;

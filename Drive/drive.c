@@ -170,4 +170,14 @@ bool driveToGyro(int degrees, bool left = true, int time = 5000) {
 	return driveToParam(speed, 0, time, true, false, 0, 0, degrees);
 }
 
+// Drive until the sonar returns *something*
+bool driveToSonarRange(int speed, int overdrive = 500, int timeout = 5000, int interval = 100) {
+	ClearTimer(T3);
+	while (time1[T3] < timeout && !readSonar()) {
+		driveToEncoder(speed, interval);
+	}
+	driveToEncoder(speed, overdrive);
+	return (bool)readSonar();
+}
+
 #endif
