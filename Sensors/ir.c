@@ -6,7 +6,7 @@
 int readIR() {
 	int ir = HTIRS2readACDir(IRSeeker);
 	nxtDisplayCenteredBigTextLine(1, "IR: %d", ir);
-	return HTIRS2readACDir(ir);
+	return ir;
 }
 
 int readMidIR() {
