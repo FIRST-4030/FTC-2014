@@ -25,35 +25,53 @@
 
 task main()
 {
-  initializeRobot();
-  waitForStart();
+	bool valid = false;
+	initializeRobot();
+	waitForStart();
 
-  StartTask(Lift);
+	// Get the lift going
+	StartTask(Lift);
 
-  driveToEncoder(AUTO_DRIVE_SPEED, 2500);
+	// Pull ahead and read the IR position
+	driveToEncoder(AUTO_DRIVE_SPEED, 2500);
+	if (readIR() == 5) {
+		valid = AutoScoreSide();
+	} else {
+		// If the beacon isn't straight ahead, turn, backup and take a second reading
+		driveToGyro(90, !TURN_LEFT);
+		driveToEncoder(-AUTO_DRIVE_SPEED, 1100);
 
-  int ir = readIR();
-  if (ir == 5) {
-  	AutoScoreSide();
-  } else {
-	  driveToGyro(90, !TURN_LEFT);
-	  driveToEncoder(-AUTO_DRIVE_SPEED, 1100);
+		switch (readIR()) {
+	  		case 4:
+				valid = AutoScoreAhead();
+				break;
 
-	  switch (readIR()) {
-	  	case 4:
-		  	AutoScoreAhead();
-		  	break;
+			case 3:
+				valid = AutoScoreIntermediate();
+				break;
 
-		  case 3:
-		  	AutoScoreIntermediate();
-		  	break;
-
-			// IR failure
-		  default:
-				servoHookCapture();
-				wait1Msec(0.5 * 1000);
-				servoHookRelease();
+			default:
+				valid = false;
 				break;
 		}
 	}
+	
+	// Score if we are aligned
+	if (valid) {
+		valid = AutoScore();
+	}
+	// Kick if we scored
+	if (valid) {
+		AutoKickstand();
+	}
+
+	// Wiggle and flash if something went wrong
+	if (!valid) {
+		servoHookCapture();
+		wait1Msec(0.5 * 1000);
+		servoHookRelease();
+	}
+	
+	// Always return the lift to COLLECT, even if we failed
+	setWaitLiftCmd(COLLECT);
 }

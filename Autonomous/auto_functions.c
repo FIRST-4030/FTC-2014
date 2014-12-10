@@ -12,27 +12,29 @@
 #define AUTO_DRIVE_SPEED_LOW (AUTO_DRIVE_SPEED * 0.2)
 #define AUTO_DRIVE_SPEED_CRAWL (AUTO_DRIVE_SPEED_LOW * 0.5)
 
-void AutoScore() {
-
-	// Move the lift so we get clear readings
+bool AutoScore() {
+	// Move the lift so we get clear sonar readings
 	setWaitLiftCmd(LOW);
 
 	// Drive into sonar range
-	driveToSonarRange(AUTO_DRIVE_SPEED_LOW);
+	if (!driveToSonarRange(AUTO_DRIVE_SPEED_LOW)) {
+		return false;
+	}
 
 	// Re-align to IR, just in case we drifted
 	if (!driveToIR(-AUTO_DRIVE_SPEED, true, false, IR_MID)) {
-		// Bail on failure
-		return;
+		return false;
 	}
 
 	// Approach the goal and turn to correct for IR offset
-	driveToSonar(AUTO_DRIVE_SPEED_LOW, 34);
+	if (!driveToSonar(AUTO_DRIVE_SPEED_LOW, 34)) {
+		return false;
+	}
 	driveToGyro(20, TURN_LEFT);
 
 	// Start the lift up and sungle in tight
 	setLiftCmd(HIGH);
-	driveToSonar(AUTO_DRIVE_SPEED_CRAWL, 30);
+	driveToSonar(AUTO_DRIVE_SPEED_CRAWL, 30, false, 1000);
 
 	// Wait for the lift and dump
 	waitLiftAtTarget();
@@ -45,6 +47,9 @@ void AutoScore() {
 	wait1Msec(1 * 1000);
 	driveToEncoder(-AUTO_DRIVE_SPEED_LOW, 500);
 	waitLiftAtTarget();
+	
+	// IF we get here all was well
+	return true;
 }
 
 void AutoKickstand() {
@@ -57,27 +62,24 @@ void AutoKickstand() {
 	driveToEncoder(-AUTO_DRIVE_SPEED, 1000);
 }
 
-void AutoScoreAhead() {
+bool AutoScoreAhead() {
 	driveToEncoder(AUTO_DRIVE_SPEED, 1600);
 	driveToIR(AUTO_DRIVE_SPEED, false, false, 4);
 	driveToGyro(90, TURN_LEFT);
 
-	// High goal and kickstand
-	//AutoScore();
-	//AutoKickstand();
+	// Assume failure until we debug
+	return false;
 }
 
-void AutoScoreIntermediate() {
-
+bool AutoScoreIntermediate() {
 	// Align to IR
 	driveToIR(AUTO_DRIVE_SPEED, true, false, IR_MID);
-
-	// High goal and kickstand
-	AutoScore();
-	//AutoKickstand();
+	
+	// Assume failure until we debug
+	return false;
 }
 
-void AutoScoreSide() {
+bool AutoScoreSide() {
 
 	// Turn left, drive past the beacon, turn back
 	driveToGyro(45, TURN_LEFT);
@@ -86,12 +88,11 @@ void AutoScoreSide() {
 
 	// Turn to IR alignment
 	if (!driveToIR(-AUTO_DRIVE_SPEED, true, false, IR_MID)) {
-		return;
+		return false;
 	}
-
-	// High goal and kickstand
-	AutoScore();
-	//AutoKickstand();
+	
+	// If we got here all is well
+	return true;
 }
 
 #endif
