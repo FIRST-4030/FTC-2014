@@ -91,7 +91,7 @@ bool isLiftReady() {
 
 void waitLiftReady() {
 	while (!isLiftReady()) {
-		wait1Msec(10);
+		abortTimeslice();
 	}
 }
 
