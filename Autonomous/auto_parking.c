@@ -33,19 +33,27 @@ task main()
   driveToEncoder(AUTO_DRIVE_SPEED, 2500);
 
   int ir = readIR();
-
-  if(ir == 5) {
+  if (ir == 5) {
   	AutoScoreSide();
   } else {
 	  driveToGyro(90, !TURN_LEFT);
 	  driveToEncoder(-AUTO_DRIVE_SPEED, 1100);
-	  ir = readIR();
-	  if(ir == 4) {
-	  	AutoScoreAhead();
-	  } else if(ir == 3) {
-	  	AutoScoreIntermediate();
+
+	  switch (readIR()) {
+	  	case 4:
+		  	AutoScoreAhead();
+		  	break;
+
+		  case 3:
+		  	AutoScoreIntermediate();
+		  	break;
+
+			// IR failure
+		  default:
+				servoHookCapture();
+				wait1Msec(0.5 * 1000);
+				servoHookRelease();
+				break;
 		}
 	}
-
-	StopTask(Lift);
 }

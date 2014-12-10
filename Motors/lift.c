@@ -81,7 +81,7 @@ void liftFatalErr() {
 	hogCPU();
 	stopLift();
 	nxtDisplayCenteredBigTextLine(1, "Lift Err");
-	wait1Msec(20*1000);
+	wait1Msec(20 * 1000);
 	StopAllTasks();
 }
 
@@ -145,7 +145,9 @@ task Lift() {
 	// Run forever
 	while (true) {
 
-		nxtDisplayBigTextLine(1, "%d %d", (int)liftCmd, readLiftEncoder());
+		#ifdef LIFT_DEBUG
+			nxtDisplayBigTextLine(1, "%d %d", (int)liftCmd, readLiftEncoder());
+		#endif
 
 		// When reset is commanded ignore everything else until we are ready
 		if (liftCmd == RESET) {

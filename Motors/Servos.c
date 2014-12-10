@@ -8,8 +8,8 @@
 #define HOPPER_MIN (50)
 #define HOPPER_RATE (0)
 #define HIGH_MIN (110)
-#define HIGH_MAX (200)
-#define HIGH_RATE (2)
+#define HIGH_MAX (220)
+#define HIGH_RATE (5)
 
 TServoIndex servoHook;
 TServoIndex servoHopper;

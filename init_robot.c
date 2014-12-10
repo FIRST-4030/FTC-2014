@@ -28,6 +28,11 @@ void initializeRobot() {
 	#ifdef FTC_Drive
 	initIR(IRSeeker);
 	#endif
+
+	// Set the sonar sensor to be used
+	#ifdef FTC_SONAR
+	initSonar(sonarSensor);
+	#endif
 }
 
 #endif

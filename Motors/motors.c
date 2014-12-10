@@ -26,7 +26,6 @@ void runDriveMotorsHorizontal(int top, int bottom) {
 // Stop all drive motion
 void stopDriveMotors() {
 	runDriveMotors(0, 0);
-	wait1Msec(100);
 }
 
 // Run motors at the specified speed, stopping after DURATION milliseconds

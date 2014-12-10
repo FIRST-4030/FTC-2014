@@ -9,7 +9,7 @@
 #define LIFT_DOWNF (100)
 #define LIFT_DOWNS (75)
 #define GYRO_SPEED (100)
-#define SONAR_SPEED (25)
+#define SONAR_SPEED (50)
 
 #define IR_SIG_LOST (10)
 
@@ -105,8 +105,8 @@ bool driveToParam(int speed, int distance = 0, int time = 5000, bool turn = fals
 		} else if (sonar != 0) {
 			int sonarVal = readSonar();
 
-			// Stop if the sonar reading is invalid
-			if (!sonarValid(sonarVal)) {
+			// Stop if the sonar reading is invalid (i.e. 0)
+			if (!sonarVal) {
 				failed = true;
 				break;
 			}
@@ -151,8 +151,8 @@ bool driveToIR(int speed, bool turn, bool horizontal, int ir, int time = 5000) {
 }
 
 // Shorthand for sonar-based driving
-bool driveToSonar(int sonar, bool horizontal, int time = 5000) {
-	return driveToParam(SONAR_SPEED, 0, time, false, horizontal, 0, sonar, 0);
+bool driveToSonar(int speed, int sonar, bool horizontal, int time = 5000) {
+	return driveToParam(speed, 0, time, false, horizontal, 0, sonar, 0);
 }
 
 // Shorthand for distance-based driving
