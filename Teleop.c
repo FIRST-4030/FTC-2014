@@ -42,10 +42,10 @@ task main()
   StartTask(DriveMec);
   StartTask(Lift);
 
-  DriveSpinnerMotor(SPINNER_IN);
   servoHighDrop();
-  wait1Msec(0.1 * 1000);
+  wait1Msec(250);
   servoHighHold();
+  DriveSpinnerMotor(SPINNER_IN);
 
 	while(true)
 	{
