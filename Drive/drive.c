@@ -9,7 +9,6 @@
 #define LIFT_DOWNF (100)
 #define LIFT_DOWNS (75)
 #define GYRO_SPEED (100)
-#define SONAR_SPEED (50)
 
 #define IR_SIG_LOST (10)
 
@@ -111,10 +110,10 @@ bool driveToParam(int speed, int distance = 0, int time = 5000, bool turn = fals
 				break;
 			}
 
-			// Approach when speed is > 0, recede with speed < 0
+			// Approach when sonar is > 0, recede with sonar < 0
 			if (
-				(speed > 0 && (sonarVal < sonar)) ||
-				(speed < 0 && (sonarVal > abs(sonar)))
+				(sonar > 0 && (sonarVal < abs(sonar))) ||
+				(sonar < 0 && (sonarVal > abs(sonar)))
 			) {
 				break;
 			}
