@@ -43,6 +43,9 @@ task main()
   StartTask(Lift);
 
   DriveSpinnerMotor(SPINNER_IN);
+  servoHighDrop();
+  wait1Msec(0.1 * 1000);
+  servoHighHold();
 
 	while(true)
 	{
