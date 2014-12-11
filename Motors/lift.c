@@ -4,6 +4,7 @@
 #define LIFT_SPEED (100)
 #define LIFT_DEAD_ZONE (100)
 #define LIFT_FULL_ERR (100)
+#define LIFT_HEIGHT_ROBOT (6300)
 
 #define LIFT_HEIGHT_COLLECT (10)
 #define LIFT_HEIGHT_DRIVE (1000)
@@ -17,6 +18,7 @@
 
 bool liftReady = false;
 bool liftAtTarget = false;
+bool liftAboveRobot = false;
 tMotor liftDrive;
 tSensors liftTouch;
 typedef enum {
@@ -85,6 +87,10 @@ void liftFatalErr() {
 	StopAllTasks();
 }
 
+bool isLiftAboveRobot() {
+	return liftAboveRobot;
+}
+
 bool isLiftReady() {
 	return liftReady;
 }
@@ -130,11 +136,41 @@ void waitLiftAtTarget() {
 	}
 }
 
+void waitLiftAboveRobot() {
+	while(!isLiftAboveRobot()) {
+		wait1Msec(10);
+	}
+}
+
 bool setWaitLiftCmd(LiftState cmd) {
 	if (!setLiftCmd(cmd)) {
 		return false;
 	}
 	waitLiftAtTarget();
+	return true;
+}
+
+bool setWaitLiftHopperCmd(LiftState cmd) {
+	if (!setLiftCmd(cmd)) {
+		return false;
+	}
+
+	if(cmd == COLLECT || cmd == DRIVE) {
+		setHopperCmd(UP);
+		waitLiftAtTarget();
+	}
+	//For dumping, moves hopper halfway and then down
+	else if(cmd == LOW || cmd == MED || cmd == HIGH) {
+		waitLiftAboveRobot();
+		setHopperCmd(HALF);
+		waitLiftAtTarget();
+		setWaitHopperCmd(DOWN);
+	}
+	//In case someone tries to set the hopper for RESET
+	else {
+		waitLiftAtTarget();
+	}
+
 	return true;
 }
 
@@ -254,6 +290,9 @@ task Lift() {
 		} else {
 			liftAtTarget = false;
 		}
+
+		//Determines whether the lift is above the robot by reading the encoder
+		liftAboveRobot = readLiftEncoder() >= LIFT_HEIGHT_ROBOT;
 	}
 }
 

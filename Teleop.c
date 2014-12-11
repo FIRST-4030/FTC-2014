@@ -26,11 +26,8 @@
 void stopAndDump(LiftState cmd) {
 	StopTask(DriveMec);
 	stopDriveMotors();
-	setWaitLiftCmd(cmd);
-	SetHopperServo(HOPPER_MIN);
-	wait1Msec(3.5 * 1000);
-	SetHopperServo(HOPPER_MAX);
-	setWaitLiftCmd(COLLECT);
+	setWaitLiftHopperCmd(cmd);
+	setWaitLiftHopperCmd(COLLECT);
 	StartTask(DriveMec);
 }
 
@@ -41,6 +38,7 @@ task main()
 
   StartTask(DriveMec);
   StartTask(Lift);
+  StartTask(Hopper);
 
   servoHighDrop();
   wait1Msec(250);
