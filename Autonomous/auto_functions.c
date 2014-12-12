@@ -27,7 +27,7 @@ bool AutoScore() {
 	}
 
 	// Approach the goal and turn to correct for IR offset
-	if (!driveToSonar(AUTO_DRIVE_SPEED_LOW, 34)) {
+	if (!driveToSonar(AUTO_DRIVE_SPEED_LOW, 34, false)) {
 		return false;
 	}
 	driveToGyro(20, TURN_LEFT);
@@ -47,7 +47,7 @@ bool AutoScore() {
 	wait1Msec(1 * 1000);
 	driveToEncoder(-AUTO_DRIVE_SPEED_LOW, 500);
 	waitLiftAtTarget();
-	
+
 	// IF we get here all was well
 	return true;
 }
@@ -74,7 +74,7 @@ bool AutoScoreAhead() {
 bool AutoScoreIntermediate() {
 	// Align to IR
 	driveToIR(AUTO_DRIVE_SPEED, true, false, IR_MID);
-	
+
 	// Assume failure until we debug
 	return false;
 }
@@ -90,7 +90,7 @@ bool AutoScoreSide() {
 	if (!driveToIR(-AUTO_DRIVE_SPEED, true, false, IR_MID)) {
 		return false;
 	}
-	
+
 	// If we got here all is well
 	return true;
 }
