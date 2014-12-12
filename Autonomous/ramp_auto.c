@@ -45,3 +45,5 @@ task main()
 	//I'm currently altering the lift to automatically dump, so this can be done later//
 	//stopAndDump(MED);
 }
+//Code for on ramp autonomous; moves off ramp, hooks med roll. goal, moves it to parking zone, scores 2 balls in possesion.
+//Total 70 points
