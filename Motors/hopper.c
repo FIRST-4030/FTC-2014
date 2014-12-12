@@ -1,11 +1,14 @@
 #ifndef FTC_HOPPER
 #define FTC_HOPPER
 
+#define HOPPER_MAX (220)
+#define HOPPER_MIN (50)
+#define HOPPER_RATE (0)
+
 #define HOPPER_POS_DOWN (50)
 #define HOPPER_POS_MID (135)
 #define HOPPER_POS_UP (220)
 
-bool hopperReady = false;
 bool hopperAtTarget = false;
 int hopperDumpTime = 3.5 * 1000;
 typedef enum {
@@ -14,6 +17,20 @@ typedef enum {
         UP,
 } HopperState;
 HopperState hopperCmd = UP;
+
+void SetHopperServo (int position, int min = HOPPER_MIN, int max = HOPPER_MAX) {
+	setServo(servoHopper, position, min, max);
+}
+
+int getHopperServo() {
+	return ServoValue[servoHopper];
+}
+
+void hopperInit(TServoIndex hopper) {
+	servoHopper = hopper;
+	servoChangeRate[servoHopper] = HOPPER_RATE;
+	SetHopperServo(HOPPER_MAX);
+}
 
 void hopperFatalErr() {
 	hogCPU();

@@ -19,6 +19,7 @@
 bool liftReady = false;
 bool liftAtTarget = false;
 bool liftAboveRobot = false;
+bool abortLift = false;
 tMotor liftDrive;
 tSensors liftTouch;
 typedef enum {
@@ -133,12 +134,18 @@ bool isLiftAtTarget() {
 void waitLiftAtTarget() {
 	while (!isLiftAtTarget()) {
 		wait1Msec(10);
+		if(abortLift) {
+			break;
+		}
 	}
 }
 
 void waitLiftAboveRobot() {
 	while(!isLiftAboveRobot()) {
 		wait1Msec(10);
+		if(abortLift) {
+			break;
+		}
 	}
 }
 
