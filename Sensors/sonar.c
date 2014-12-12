@@ -3,17 +3,20 @@
 
 #include "../drivers/lego-ultrasound.h"
 
-int readSonar() {
-	return USreadDist(sonarSensor);
+tMUXSensor sonarDevice;
+void initSonar(tMUXSensor device) {
+	sonarDevice = device;
 }
 
-bool sonarValid(int val) {
-	if (val < 10) {
-		return false;
-	} else if (val > 300) {
-		return false;
+int readSonar() {
+	int sonar = USreadDist(sonarDevice);
+	#ifdef SONAR_DEBUG
+		nxtDisplayCenteredBigTextLine(1, "S: %d", sonar);
+	#endif
+	if (sonar < 10 || sonar > 250) {
+		sonar = 0;
 	}
-	return true;
+	return sonar;
 }
 
 #endif

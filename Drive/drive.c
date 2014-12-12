@@ -9,7 +9,8 @@
 #define LIFT_DOWNF (100)
 #define LIFT_DOWNS (75)
 #define GYRO_SPEED (100)
-#define SONAR_SPEED (25)
+
+#define IR_SIG_LOST (10)
 
 //Sensors to Use in 'driveTo' functions in case of multiple sensors
 tMUXSensor IR;
@@ -103,16 +104,16 @@ bool driveToParam(int speed, int distance = 0, int time = 5000, bool turn = fals
 		} else if (sonar != 0) {
 			int sonarVal = readSonar();
 
-			// Stop if the sonar reading is invalid
-			if (!sonarValid(sonarVal)) {
+			// Stop if the sonar reading is invalid (i.e. 0)
+			if (!sonarVal) {
 				failed = true;
 				break;
 			}
 
-			// Approach when speed is > 0, recede with speed < 0
+			// Approach when sonar is > 0, recede with sonar < 0
 			if (
-				(speed > 0 && (sonarVal < sonar)) ||
-				(speed < 0 && (sonarVal > abs(sonar)))
+				(sonar > 0 && (sonarVal < abs(sonar))) ||
+				(sonar < 0 && (sonarVal > abs(sonar)))
 			) {
 				break;
 			}
@@ -149,8 +150,8 @@ bool driveToIR(int speed, bool turn, bool horizontal, int ir, int time = 5000) {
 }
 
 // Shorthand for sonar-based driving
-bool driveToSonar(int sonar, bool horizontal, int time = 5000) {
-	return driveToParam(SONAR_SPEED, 0, time, false, horizontal, 0, sonar, 0);
+bool driveToSonar(int speed, int sonar, bool horizontal, int time = 5000) {
+	return driveToParam(speed, 0, time, false, horizontal, 0, sonar, 0);
 }
 
 // Shorthand for distance-based driving
@@ -167,6 +168,16 @@ bool driveToGyro(int degrees, bool left = true, int time = 5000) {
 		degrees *= -1;
 	}
 	return driveToParam(speed, 0, time, true, false, 0, 0, degrees);
+}
+
+// Drive until the sonar returns *something*
+bool driveToSonarRange(int speed, int overdrive = 500, int timeout = 5000, int interval = 100) {
+	ClearTimer(T3);
+	while (time1[T3] < timeout && !readSonar()) {
+		driveToEncoder(speed, interval);
+	}
+	driveToEncoder(speed, overdrive);
+	return (bool)readSonar();
 }
 
 #endif

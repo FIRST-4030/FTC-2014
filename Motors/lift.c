@@ -4,10 +4,11 @@
 #define LIFT_SPEED (100)
 #define LIFT_DEAD_ZONE (100)
 #define LIFT_FULL_ERR (100)
+#define LIFT_HEIGHT_ROBOT (6300)
 
 #define LIFT_HEIGHT_COLLECT (10)
 #define LIFT_HEIGHT_DRIVE (1000)
-#define LIFT_HEIGHT_LOW (6000)
+#define LIFT_HEIGHT_LOW (6500)
 #define LIFT_HEIGHT_MED (10000)
 #define LIFT_HEIGHT_HIGH (14000)
 
@@ -17,6 +18,8 @@
 
 bool liftReady = false;
 bool liftAtTarget = false;
+bool liftAboveRobot = false;
+bool abortLift = false;
 tMotor liftDrive;
 tSensors liftTouch;
 typedef enum {
@@ -81,8 +84,12 @@ void liftFatalErr() {
 	hogCPU();
 	stopLift();
 	nxtDisplayCenteredBigTextLine(1, "Lift Err");
-	wait1Msec(20*1000);
+	wait1Msec(20 * 1000);
 	StopAllTasks();
+}
+
+bool isLiftAboveRobot() {
+	return liftAboveRobot;
 }
 
 bool isLiftReady() {
@@ -91,7 +98,7 @@ bool isLiftReady() {
 
 void waitLiftReady() {
 	while (!isLiftReady()) {
-		wait1Msec(10);
+		abortTimeslice();
 	}
 }
 
@@ -127,6 +134,18 @@ bool isLiftAtTarget() {
 void waitLiftAtTarget() {
 	while (!isLiftAtTarget()) {
 		wait1Msec(10);
+		if(abortLift) {
+			break;
+		}
+	}
+}
+
+void waitLiftAboveRobot() {
+	while(!isLiftAboveRobot()) {
+		wait1Msec(10);
+		if(abortLift) {
+			break;
+		}
 	}
 }
 
@@ -138,6 +157,30 @@ bool setWaitLiftCmd(LiftState cmd) {
 	return true;
 }
 
+bool setWaitLiftHopperCmd(LiftState cmd) {
+	if (!setLiftCmd(cmd)) {
+		return false;
+	}
+
+	if(cmd == COLLECT || cmd == DRIVE) {
+		setHopperCmd(UP);
+		waitLiftAtTarget();
+	}
+	//For dumping, moves hopper halfway and then down
+	else if(cmd == LOW || cmd == MED || cmd == HIGH) {
+		waitLiftAboveRobot();
+		setHopperCmd(HALF);
+		waitLiftAtTarget();
+		setWaitHopperCmd(DOWN);
+	}
+	//In case someone tries to set the hopper for RESET
+	else {
+		waitLiftAtTarget();
+	}
+
+	return true;
+}
+
 task Lift() {
 	//For fail-safe code, could be inverted if needed
 	int liftSpeed = LIFT_SPEED;
@@ -145,7 +188,9 @@ task Lift() {
 	// Run forever
 	while (true) {
 
-		nxtDisplayBigTextLine(1, "%d %d", (int)liftCmd, readLiftEncoder());
+		#ifdef LIFT_DEBUG
+			nxtDisplayBigTextLine(1, "%d %d", (int)liftCmd, readLiftEncoder());
+		#endif
 
 		// When reset is commanded ignore everything else until we are ready
 		if (liftCmd == RESET) {
@@ -252,6 +297,9 @@ task Lift() {
 		} else {
 			liftAtTarget = false;
 		}
+
+		//Determines whether the lift is above the robot by reading the encoder
+		liftAboveRobot = readLiftEncoder() >= LIFT_HEIGHT_ROBOT;
 	}
 }
 

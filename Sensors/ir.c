@@ -4,7 +4,11 @@
 #include "../drivers/hitechnic-irseeker-v2.h"
 
 int readIR() {
-	return HTIRS2readACDir(IRSeeker);
+	int ir = HTIRS2readACDir(IRSeeker);
+	#ifdef IR_DEBUG
+		nxtDisplayCenteredBigTextLine(1, "IR: %d", ir);
+	#endif
+	return ir;
 }
 
 int readMidIR() {

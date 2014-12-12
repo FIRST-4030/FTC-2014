@@ -114,15 +114,4 @@ bool onRed(int sensorVal) {
 	return onColor(RED, sensorVal);
 }
 
-void FlashLights(int times, int delay) {
-	for(int i=0; i < times; i++) {
-		LSsetInactive(lightRight);
-	  LSsetInactive(lightLeft);
-		wait1Msec(delay);
-	  LSsetActive(lightRight);
-  	LSsetActive(lightLeft);
-		wait1Msec(delay);
-	}
-}
-
 #endif

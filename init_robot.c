@@ -21,7 +21,21 @@ void initializeRobot() {
 
 	// Set servo rates and start positions
 	#ifdef FTC_SERVOS
-	servosInit(goalHook, hopperTilt, lightLeft);
+	servosInit(goalHook, lightLeft, highGoal);
+	#endif
+
+	#ifdef FTC_HOPPER
+	hopperInit(hopperTilt);
+	#endif
+
+	//Set the IR sensor to be used
+	#ifdef FTC_Drive
+	initIR(IRSeeker);
+	#endif
+
+	// Set the sonar sensor to be used
+	#ifdef FTC_SONAR
+	initSonar(sonarSensor);
 	#endif
 }
 
