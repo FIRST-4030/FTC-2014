@@ -31,6 +31,7 @@ task main()
 
 	// Get the lift going
 	StartTask(Lift);
+	StartTask(Hopper);
 
 	// Pull ahead and read the IR position
 	driveToEncoder(AUTO_DRIVE_SPEED, 2500);
@@ -55,7 +56,7 @@ task main()
 				break;
 		}
 	}
-	
+
 	// Score if we are aligned
 	if (valid) {
 		valid = AutoScore();
@@ -71,7 +72,7 @@ task main()
 		wait1Msec(0.5 * 1000);
 		servoHookRelease();
 	}
-	
+
 	// Always return the lift to COLLECT, even if we failed
 	setWaitLiftCmd(COLLECT);
 }

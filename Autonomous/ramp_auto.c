@@ -30,6 +30,9 @@ task main()
   initializeRobot();
   waitForStart();
 
+  StartTask(Lift);
+  StartTask(Hopper);
+
 	//For all of these, they were written with brackets [] instead of parenthesis ()//
   //I changed this, as all method calls must be with parenthesis, not brackets//
   driveToEncoder(AUTO_DRIVE_SPEED, 5000);
@@ -41,9 +44,7 @@ task main()
 	driveToGyro(120, TURN_LEFT);
 	driveToEncoder(AUTO_DRIVE_SPEED, 10000);
 
-	//Stop and dump is a tele-op exclusive method//
-	//I'm currently altering the lift to automatically dump, so this can be done later//
-	//stopAndDump(MED);
+	setWaitLiftHopperCmd(MED);
 }
 //Code for on ramp autonomous; moves off ramp, hooks med roll. goal, moves it to parking zone, scores 2 balls in possesion.
 //Total 70 points
