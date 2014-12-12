@@ -41,8 +41,12 @@ task main()
 	driveToEncoder(-AUTO_DRIVE_SPEED, 5000);
 	servoHookCapture();
 
-	driveToGyro(120, TURN_LEFT);
-	driveToEncoder(AUTO_DRIVE_SPEED, 10000);
+	driveToGyro(45, TURN_RIGHT);
+	driveToEncoder(AUTO_DRIVE_SPEED, 2000);
+
+	driveToGyro(45, TURN_LEFT);
+	driveToEncoder(AUTO_DRIVE_SPEED, 6000);
+	driveToGyro(90, TURN_LEFT);
 
 	setWaitLiftHopperCmd(MED);
 }
