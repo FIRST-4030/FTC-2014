@@ -134,18 +134,12 @@ bool isLiftAtTarget() {
 void waitLiftAtTarget() {
 	while (!isLiftAtTarget()) {
 		wait1Msec(10);
-		if(abortLift) {
-			break;
-		}
 	}
 }
 
 void waitLiftAboveRobot() {
 	while(!isLiftAboveRobot()) {
 		wait1Msec(10);
-		if(abortLift) {
-			break;
-		}
 	}
 }
 

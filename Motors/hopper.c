@@ -52,15 +52,8 @@ bool isHopperAtTarget() {
 	return hopperAtTarget;
 }
 
-void waitHopperAtTarget() {
-	while (!isHopperAtTarget()) {
-		wait1Msec(10);
-	}
-}
-
 void setWaitHopperCmd(HopperState cmd) {
 	setHopperCmd(cmd);
-	waitHopperAtTarget();
 	if(cmd == DOWN) {
 		wait1Msec(hopperDumpTime);
 	}
