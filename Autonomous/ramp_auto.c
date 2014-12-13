@@ -44,7 +44,8 @@ task main()
 	driveToGyro(120, TURN_LEFT);
 	driveToEncoder(AUTO_DRIVE_SPEED, 10000);
 
-	setWaitLiftHopperCmd(MED);
+	setLiftCmd(MED);
+	hopperAutoDump();
 }
 //Code for on ramp autonomous; moves off ramp, hooks med roll. goal, moves it to parking zone, scores 2 balls in possesion.
 //Total 70 points
