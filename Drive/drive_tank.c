@@ -1,5 +1,5 @@
-#ifndef FTC_DRIVETASKDEP
-#define FTC_DRIVETASKDEP
+#ifndef FTC_DRIVETASK
+#define FTC_DRIVETASK
 
 ///// TANK DRIVE TASK /////
 // Standard Tank Drive

@@ -6,19 +6,34 @@
 #define HOPPER_RATE (0)
 
 #define HOPPER_POS_DOWN (50)
-#define HOPPER_POS_MID (135)
+#define HOPPER_POS_MID (90)
 #define HOPPER_POS_UP (220)
 
-bool hopperAtTarget = false;
-int hopperDumpTime = 3.5 * 1000;
+bool dumpSignal = false;
 typedef enum {
         DOWN,
         HALF,
         UP,
 } HopperState;
 HopperState hopperCmd = UP;
+float DUMP_DELAYS[NUM_LIFT_STATES];
 
-void SetHopperServo (int position, int min = HOPPER_MIN, int max = HOPPER_MAX) {
+void SetHopperServo (HopperState cmd, int min = HOPPER_MIN, int max = HOPPER_MAX) {
+	int position = HOPPER_POS_UP;
+	switch (cmd) {
+
+		case DOWN:
+			position = HOPPER_POS_DOWN;
+			break;
+
+		case HALF:
+			position = HOPPER_POS_MID;
+			break;
+
+		case UP:
+			position = HOPPER_POS_UP;
+			break;
+	}
 	setServo(servoHopper, position, min, max);
 }
 
@@ -29,7 +44,11 @@ int getHopperServo() {
 void hopperInit(TServoIndex hopper) {
 	servoHopper = hopper;
 	servoChangeRate[servoHopper] = HOPPER_RATE;
-	SetHopperServo(HOPPER_MAX);
+	SetHopperServo(UP);
+
+	DUMP_DELAYS[HIGH] = 1.5;
+	DUMP_DELAYS[MED] = 2.5;
+	DUMP_DELAYS[LOW] = 3.5;
 }
 
 void hopperFatalErr() {
@@ -43,62 +62,39 @@ HopperState getHopperCmd() {
 	return hopperCmd;
 }
 
-void setHopperCmd(HopperState cmd) {
-	hopperAtTarget = false;
-	hopperCmd = cmd;
-}
-
-bool isHopperAtTarget() {
-	return hopperAtTarget;
-}
-
-void setWaitHopperCmd(HopperState cmd) {
-	setHopperCmd(cmd);
-	if(cmd == DOWN) {
-		wait1Msec(hopperDumpTime);
+bool hopperAutoDump() {
+	//Safety check, can't dump for a lift below LOW
+	if(getLiftCmd() < LOW) {
+		return false;
 	}
-}
 
-bool isHopperAtTarget() {
-	return hopperAtTarget;
+	//Raises dump signal
+	dumpSignal = true;
+	return true;
 }
 
 task Hopper() {
 	// Run forever
 	while (true) {
-		// Determine the position the hopper should be at
-		int hopperCmdPos = 0;
-		switch (hopperCmd) {
-			case DOWN:
-				hopperCmdPos = HOPPER_POS_DOWN;
-				break;
+		LiftState liftCmd = getLiftCmd();
 
-			case HALF:
-				hopperCmdPos = HOPPER_POS_MID;
-				break;
-
-			case UP:
-				hopperCmdPos = HOPPER_POS_UP;
-				break;
-
-			// If we get here something bad happened
-			// Stop the hopper and exit the task
-			default:
-				hopperFatalErr();
-				// hopperFatalErr should never return, but for clarity:
-				break;
+		// Clear the dump signal when the liftCmd goes to any non-scoring position
+		if (dumpSignal && liftCmd < LOW) {
+			dumpSignal = false;
 		}
 
-		//Change position to the inputted one
-		SetHopperServo(hopperCmdPos);
-
-		// Note when we're on-target for outside observers
-		if (getHopperServo() == hopperCmdPos) {
-			hopperAtTarget = true;
+		// Dump when we're on-target and flagged for dump
+		if (dumpSignal && isLiftAtTarget()) {
+			SetHopperServo(DOWN);
+			wait1Msec(1000 * DUMP_DELAYS[(int)liftCmd]);
+			setLiftCmd(COLLECT);
+		// Hopper at half when above the robot body
+		} else if (isLiftAboveRobot()) {
+			SetHopperServo(HALF);
+		// Hopper upright when below robot body
 		} else {
-			hopperAtTarget = false;
+			SetHopperServo(UP);
 		}
-
 	}
 }
 

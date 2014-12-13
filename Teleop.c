@@ -24,11 +24,8 @@
 #include "teleop_includes.h"
 
 void stopAndDump(LiftState cmd) {
-	StopTask(DriveMec);
-	stopDriveMotors();
-	setWaitLiftHopperCmd(cmd);
-	setWaitLiftHopperCmd(COLLECT);
-	StartTask(DriveMec);
+	setLiftCmd(cmd);
+	hopperAutoDump();
 }
 
 task main()

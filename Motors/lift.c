@@ -1,10 +1,11 @@
 #ifndef FTC_LIFT
 #define FTC_LIFT
+#define LIFT_DEBUG
 
 #define LIFT_SPEED (100)
 #define LIFT_DEAD_ZONE (100)
 #define LIFT_FULL_ERR (100)
-#define LIFT_HEIGHT_ROBOT (6300)
+#define LIFT_HEIGHT_ROBOT (5000)
 
 #define LIFT_HEIGHT_COLLECT (10)
 #define LIFT_HEIGHT_DRIVE (1000)
@@ -18,8 +19,6 @@
 
 bool liftReady = false;
 bool liftAtTarget = false;
-bool liftAboveRobot = false;
-bool abortLift = false;
 tMotor liftDrive;
 tSensors liftTouch;
 typedef enum {
@@ -31,6 +30,7 @@ typedef enum {
         HIGH
 } LiftState;
 LiftState liftCmd = RESET;
+#define NUM_LIFT_STATES (6)
 
 void driveLift(int speed) {
 	motor[liftDrive] = speed;
@@ -89,7 +89,7 @@ void liftFatalErr() {
 }
 
 bool isLiftAboveRobot() {
-	return liftAboveRobot;
+	return (readLiftEncoder() > LIFT_HEIGHT_ROBOT);
 }
 
 bool isLiftReady() {
@@ -139,7 +139,7 @@ void waitLiftAtTarget() {
 
 void waitLiftAboveRobot() {
 	while(!isLiftAboveRobot()) {
-		wait1Msec(10);
+		abortTimeslice();
 	}
 }
 
@@ -151,33 +151,12 @@ bool setWaitLiftCmd(LiftState cmd) {
 	return true;
 }
 
-bool setWaitLiftHopperCmd(LiftState cmd) {
-	if (!setLiftCmd(cmd)) {
-		return false;
-	}
-
-	if(cmd == COLLECT || cmd == DRIVE) {
-		setHopperCmd(UP);
-		waitLiftAtTarget();
-	}
-	//For dumping, moves hopper halfway and then down
-	else if(cmd == LOW || cmd == MED || cmd == HIGH) {
-		waitLiftAboveRobot();
-		setHopperCmd(HALF);
-		waitLiftAtTarget();
-		setWaitHopperCmd(DOWN);
-	}
-	//In case someone tries to set the hopper for RESET
-	else {
-		waitLiftAtTarget();
-	}
-
-	return true;
-}
-
 task Lift() {
-	//For fail-safe code, could be inverted if needed
+	//For fail-safe code, may be inverted if needed
 	int liftSpeed = LIFT_SPEED;
+
+	// Track when we disable teleop drive
+	bool driveStopped = false;
 
 	// Run forever
 	while (true) {
@@ -292,8 +271,22 @@ task Lift() {
 			liftAtTarget = false;
 		}
 
-		//Determines whether the lift is above the robot by reading the encoder
-		liftAboveRobot = readLiftEncoder() >= LIFT_HEIGHT_ROBOT;
+		//Start/Stop DriveMec based on if it's safe with the lift
+		if(isLiftAboveRobot()) {
+			driveStopped = true;
+			#ifdef FTC_DRIVETASK
+				StopTask(DriveMec);
+				stopDriveMotors();
+			#endif
+		} else if (driveStopped) {
+			driveStopped = false;
+			#ifdef FTC_DRIVETASK
+				StartTask(DriveMec);
+			#endif
+		}
+
+		// Surrender some time to other tasks
+		EndTimeSlice();
 	}
 }
 

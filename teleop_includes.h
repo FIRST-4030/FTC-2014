@@ -17,12 +17,12 @@ const tMUXSensor lightLeft = msensor_S2_4;
 #include "Sensors/light.c"
 #include "Motors/servos.c"
 #include "Motors/motors.c"
-#include "Motors/hopper.c"
-#include "Motors/lift.c"
 #include "Drive/drive.c"
-#include "Drive/drive_direct.c"
-#include "Drive/drive_tank.c"
+//#include "Drive/drive_direct.c"
+//#include "Drive/drive_tank.c"
 #include "Drive/drive_mec.c"
+#include "Motors/lift.c"
+#include "Motors/hopper.c"
 
 #include "init_robot.c";
 
