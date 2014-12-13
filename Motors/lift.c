@@ -1,6 +1,6 @@
 #ifndef FTC_LIFT
 #define FTC_LIFT
-#define LIFT_DEBUG
+//#define LIFT_DEBUG
 
 #define LIFT_SPEED (100)
 #define LIFT_DEAD_ZONE (100)

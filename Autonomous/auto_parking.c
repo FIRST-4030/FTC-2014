@@ -31,18 +31,21 @@ task main()
 
 	// Get the lift going
 	StartTask(Lift);
-	StartTask(Hopper);
 
 	// Pull ahead and read the IR position
 	driveToEncoder(AUTO_DRIVE_SPEED, 2500);
-	if (readIR() == 5) {
+	int ir = readIR();
+	if (ir == 0) {
+		valid = false;
+	} else if (ir == 5) {
 		valid = AutoScoreSide();
 	} else {
 		// If the beacon isn't straight ahead, turn, backup and take a second reading
 		driveToGyro(90, !TURN_LEFT);
 		driveToEncoder(-AUTO_DRIVE_SPEED, 1100);
 
-		switch (readIR()) {
+		ir = readIR();
+		switch (ir) {
 	  		case 4:
 				valid = AutoScoreAhead();
 				break;

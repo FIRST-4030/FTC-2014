@@ -38,7 +38,7 @@ task main()
   StartTask(Hopper);
 
   servoHighDrop();
-  wait1Msec(250);
+  wait1Msec(500);
   servoHighHold();
   DriveSpinnerMotor(SPINNER_IN);
 
