@@ -42,7 +42,7 @@ bool AutoScore() {
 	driveToSonar(AUTO_DRIVE_SPEED_CRAWL, SONAR_NEAR, false, 1000);
 
 	// Wait for the lift and dump
-	//waitLiftAtTarget();
+	waitLiftAtTarget();
 	servoHighDrop();
 	wait1Msec(750);
 	servoHighHold();
