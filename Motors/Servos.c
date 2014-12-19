@@ -5,7 +5,7 @@
 #define HOOK_MAX (160)
 #define HOOK_RATE (0)
 #define HIGH_MIN (70)
-#define HIGH_MAX (145)
+#define HIGH_MAX (170)
 #define HIGH_RATE (0)
 
 TServoIndex servoHook;

@@ -60,34 +60,37 @@ bool AutoScore() {
 
 void AutoKickstand() {
 	// Turn and drive to clear center goal
-	driveToGyro(50, TURN_LEFT);
+	driveToGyro(60, TURN_LEFT);
 	driveToEncoder(-AUTO_DRIVE_SPEED, 1000);
 
 	// Turn to face back to kickstand
-	driveToGyro(75, TURN_LEFT);
+	driveToGyro(90, TURN_LEFT);
 
 	// Hit kickstand
 	driveToEncoder(-AUTO_DRIVE_SPEED, 3000);
 }
 
 bool AutoScoreAhead() {
-	driveToEncoder(AUTO_DRIVE_SPEED, 1600);
-	driveToIR(AUTO_DRIVE_SPEED, false, false, 4);
-	driveToGyro(90, TURN_LEFT);
+	driveToEncoder(AUTO_DRIVE_SPEED, 2000);
+
+	/*
+	if(!driveToIR(AUTO_DRIVE_SPEED, true, false, IR_MID)) {
+		return false;
+	}
+	*/
+	driveToGyro(85, TURN_LEFT);
 
 	// Assume failure until we debug
-	return false;
+	return true;
 }
 
 bool AutoScoreIntermediate() {
 	// Align to IR
-	servoHookCapture();
-	wait1Msec(1000);
-	servoHookRelease();
-	driveToIR(AUTO_DRIVE_SPEED, true, false, IR_MID);
+	if(!driveToIR(AUTO_DRIVE_SPEED, true, false, IR_MID)) {
+		return false;
+	}
 
-	// Assume failure until we debug
-	return false;
+	return true;
 }
 
 bool AutoScoreSide() {

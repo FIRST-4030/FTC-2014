@@ -6,7 +6,7 @@
 #define HOPPER_RATE (0)
 
 #define HOPPER_POS_DOWN (50)
-#define HOPPER_POS_MID (90)
+#define HOPPER_POS_MID (95)
 #define HOPPER_POS_UP (220)
 
 bool dumpSignal = false;

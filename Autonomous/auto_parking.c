@@ -41,10 +41,11 @@ task main()
 		valid = AutoScoreSide();
 	} else {
 		// If the beacon isn't straight ahead, turn, backup and take a second reading
-		driveToGyro(90, !TURN_LEFT);
+		driveToGyro(80, !TURN_LEFT);
 		driveToEncoder(-AUTO_DRIVE_SPEED, 1100);
 
 		ir = readIR();
+
 		switch (ir) {
 	  		case 4:
 				valid = AutoScoreAhead();
