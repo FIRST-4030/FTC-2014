@@ -35,7 +35,7 @@ void initializeRobot() {
 
 	// Set the sonar sensor to be used
 	#ifdef FTC_SONAR
-	initSonar(sonarSensor);
+	initSonar(sonarLowSensor, sonarHighSensor);
 	#endif
 }
 

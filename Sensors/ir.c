@@ -11,10 +11,6 @@ int readIR() {
 	return ir;
 }
 
-int readMidIR() {
-	return HTIRS2readACDir(MidIRSeeker);
-}
-
 int readIR(tSensors irSeeker) {
 	return HTIRS2readACDir(irSeeker);
 }

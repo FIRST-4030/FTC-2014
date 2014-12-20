@@ -12,6 +12,7 @@
 #define LIFT_HEIGHT_LOW (6500)
 #define LIFT_HEIGHT_MED (10000)
 #define LIFT_HEIGHT_HIGH (14000)
+#define LIFT_HEIGHT_CENTER (14000)
 
 // Define to use the Tetrix PID system
 // Clear to use our local PID system
@@ -27,10 +28,11 @@ typedef enum {
         DRIVE,
         LOW,
         MED,
-        HIGH
+        HIGH,
+        CENTER
 } LiftState;
 LiftState liftCmd = RESET;
-#define NUM_LIFT_STATES (6)
+#define NUM_LIFT_STATES (7)
 
 void driveLift(int speed) {
 	motor[liftDrive] = speed;
@@ -209,6 +211,10 @@ task Lift() {
 
 			case HIGH:
 				liftCmdHeight = LIFT_HEIGHT_HIGH;
+				break;
+
+			case CENTER:
+				liftCmdHeight = LIFT_HEIGHT_CENTER;
 				break;
 
 			case RESET:

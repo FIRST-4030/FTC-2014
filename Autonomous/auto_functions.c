@@ -11,8 +11,8 @@
 #define IR_RIGHT_SIDE (9)
 #define AUTO_DRIVE_SPEED_LOW (AUTO_DRIVE_SPEED * 0.2)
 #define AUTO_DRIVE_SPEED_CRAWL (AUTO_DRIVE_SPEED_LOW * 0.5)
-#define SONAR_FAR (36)
-#define SONAR_NEAR (SONAR_FAR - 4)
+#define SONAR_FAR (38)
+#define SONAR_NEAR (SONAR_FAR - 5)
 
 bool AutoScore() {
 	// Move the lift so we get clear sonar readings
@@ -35,10 +35,10 @@ bool AutoScore() {
 		servoHighHold();
 		return false;
 	}
-	driveToGyro(20, TURN_LEFT);
+	driveToGyro(7, !TURN_LEFT);
 
 	// Start the lift up and sungle in tight
-	setLiftCmd(HIGH);
+	setLiftCmd(CENTER);
 	driveToSonar(AUTO_DRIVE_SPEED_CRAWL, SONAR_NEAR, false, 1000);
 
 	// Wait for the lift and dump
@@ -60,55 +60,14 @@ bool AutoScore() {
 
 void AutoKickstand() {
 	// Turn and drive to clear center goal
-	driveToGyro(60, TURN_LEFT);
-	driveToEncoder(-AUTO_DRIVE_SPEED, 1000);
+	driveToGyro(65, TURN_LEFT);
+	driveToEncoder(-AUTO_DRIVE_SPEED, 1500);
 
 	// Turn to face back to kickstand
-	driveToGyro(90, TURN_LEFT);
+	driveToGyro(95, TURN_LEFT);
 
 	// Hit kickstand
-	driveToEncoder(-AUTO_DRIVE_SPEED, 3000);
-}
-
-bool AutoScoreAhead() {
-	driveToEncoder(AUTO_DRIVE_SPEED, 2000);
-
-	/*
-	if(!driveToIR(AUTO_DRIVE_SPEED, true, false, IR_MID)) {
-		return false;
-	}
-	*/
-	driveToGyro(85, TURN_LEFT);
-
-	// Assume failure until we debug
-	return true;
-}
-
-bool AutoScoreIntermediate() {
-	// Align to IR
-	if(!driveToIR(AUTO_DRIVE_SPEED, true, false, IR_MID)) {
-		return false;
-	}
-
-	return true;
-}
-
-bool AutoScoreSide() {
-
-	// Turn left, drive past the beacon, turn back
-	driveToGyro(30, TURN_LEFT);
-	driveToEncoder(AUTO_DRIVE_SPEED, 4000);
-	driveToGyro(130, !TURN_LEFT);
-
-	// Turn to IR alignment
-	if (!driveToIR(-AUTO_DRIVE_SPEED, true, false, IR_MID + 1)) {
-		return false;
-	}
-	wait1Msec(500);
-	driveToGyro(20, !TURN_LEFT);
-
-	// If we got here all is well
-	return true;
+	driveToEncoder(-AUTO_DRIVE_SPEED, 3500);
 }
 
 #endif

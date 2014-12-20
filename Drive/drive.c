@@ -8,7 +8,7 @@
 #define LIFT_UP (100)
 #define LIFT_DOWNF (100)
 #define LIFT_DOWNS (75)
-#define GYRO_SPEED (100)
+#define GYRO_SPEED (80)
 
 #define IR_SIG_LOST (10)
 
@@ -173,11 +173,11 @@ bool driveToGyro(int degrees, bool left = true, int time = 5000) {
 // Drive until the sonar returns *something*
 bool driveToSonarRange(int speed, int overdrive = 500, int timeout = 5000, int interval = 100) {
 	ClearTimer(T3);
-	while (time1[T3] < timeout && !readSonar()) {
+	while (time1[T3] < timeout && !readSonarMax()) {
 		driveToEncoder(speed, interval);
 	}
 	driveToEncoder(speed, overdrive);
-	return (bool)readSonar();
+	return (bool)readSonarMax();
 }
 
 #endif
