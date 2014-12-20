@@ -1,6 +1,10 @@
 #ifndef FTC_SONAR
 #define FTC_SONAR
 
+#define SONAR_DELAY (50)
+#define SONAR_MIN (10)
+#define SONAR_MAX (200)
+
 #include "../Motors/lift.c"
 #include "../drivers/lego-ultrasound.h"
 
@@ -11,15 +15,23 @@ void initSonar(tMUXSensor lowDevice, tMUXSensor highDevice) {
 	sonarHighDevice = highDevice;
 }
 
+// This MUXing should really live up one layer of abstraction with two different instances underlying
+// But this is RobotC and globals are the order of the day, so this is what we get instead
 int readSonar() {
-	tMUXSensor toRead;
+	tMUXSensor active;
+	tMUXSensor inactive;
 	if(isLiftAboveRobot()) {
-		toRead = sonarLowDevice;
+		active = sonarLowDevice;
+		inactive = sonarHighDevice;
 	} else {
-		toRead = sonarHighDevice;
+		active = sonarHighDevice;
+		inactive = sonarLowDevice;
 	}
-	int sonar = USreadDist(toRead);
-	if (sonar < 10 || sonar > 200) {
+	USsetOff(inactive);
+	USsetSingleMode(active);
+	wait1Msec(SONAR_DELAY);
+	int sonar = USreadDist(active);
+	if (sonar < SONAR_MIN || sonar > SONAR_MAX) {
 		sonar = 0;
 	}
 	#ifdef SONAR_DEBUG
