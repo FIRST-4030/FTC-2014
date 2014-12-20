@@ -29,9 +29,30 @@ task main()
   waitForStart();
 
   StartTask(Lift);
-
   waitLiftReady();
+
+  // We need the hopper to score in rolling goals
+  StartTask(Hopper);
+  DriveSpinnerMotor(SPINNER_IN);
+
+  // Make us drive safe
   setWaitLiftCmd(DRIVE);
-  driveToEncoder(AUTO_DRIVE_SPEED, 5500);
-  setLiftCmd(COLLECT);
+  servoHookRelease();
+
+  // Drive toward the goals and hope we hit one
+  driveToEncoder(-AUTO_DRIVE_SPEED, 7750);
+  servoHookCapture();
+
+  // Score and wait for the lift to settle
+  setLiftCmd(MED);
+	waitLiftAboveRobot();
+	hopperAutoDump();
+	while(isLiftAboveRobot()) {
+		abortTimeslice();
+	}
+
+  // Run back toward the parking zone
+  driveToGyro(30, !TURN_LEFT);
+  driveToEncoder(AUTO_DRIVE_SPEED, 9000);
+  driveToGyro(120, !TURN_LEFT);
 }
