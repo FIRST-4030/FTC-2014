@@ -48,6 +48,9 @@ task gyro() {
 		}
 		GYRO_ANGLE += speed * ((float)GYRO_PERIOD / 1000.0);
 		GYRO_READY = true;
+
+		// Surrender time to other tasks
+		EndTimeSlice();
 	}
 }
 
