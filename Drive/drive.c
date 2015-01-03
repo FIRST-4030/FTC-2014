@@ -102,7 +102,7 @@ bool driveToParam(int speed, int distance = 0, int time = 5000, bool turn = fals
 				break;
 			}
 		} else if (sonar != 0) {
-			int sonarVal = readSonar();
+			int sonarVal = readSonarMax(2);
 
 			// Stop if the sonar reading is invalid (i.e. 0)
 			if (!sonarVal) {
