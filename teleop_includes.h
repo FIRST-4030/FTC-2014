@@ -8,13 +8,14 @@ const tMUXSensor IRSeeker = msensor_S2_2;
 const tMUXSensor sonarHighSensor = msensor_S2_3;
 const tMUXSensor lightLeft = msensor_S2_4;
 
-// Teleop Includes
+//Includes for General Hardware-Related files
 #include "JoystickDriver.c"
 #include "Sensors/gyro.c"
 #include "Sensors/ir.c"
 #include "Sensors/touch.c"
 #include "Sensors/sonar.c"
 #include "Sensors/light.c"
+//#include "../Drive/lines.c"
 #include "Motors/servos.c"
 #include "Motors/motors.c"
 #include "Drive/drive.c"
@@ -24,6 +25,10 @@ const tMUXSensor lightLeft = msensor_S2_4;
 #include "Motors/lift.c"
 #include "Motors/hopper.c"
 
+//Include for the auto functions
+#include "Autonomous/auto_functions.c"
+
+//Include for robot initialization
 #include "init_robot.c";
 
 #endif
