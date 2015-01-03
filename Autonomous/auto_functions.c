@@ -6,13 +6,14 @@
 
 #define AUTO_DRIVE_SPEED (-100)
 #define TURN_LEFT (false)
+#define TURN_RIGHT (true)
 #define IR_MID (5)
 #define IR_LEFT_SIDE (1)
 #define IR_RIGHT_SIDE (9)
 #define AUTO_DRIVE_SPEED_LOW (AUTO_DRIVE_SPEED * 0.2)
 #define AUTO_DRIVE_SPEED_CRAWL (AUTO_DRIVE_SPEED_LOW * 0.5)
 #define SONAR_FAR (38)
-#define SONAR_NEAR (SONAR_FAR - 5)
+#define SONAR_NEAR (SONAR_FAR - 3)
 
 bool AutoScore() {
 	// Move the lift so we get clear sonar readings

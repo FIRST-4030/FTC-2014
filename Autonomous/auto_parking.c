@@ -22,7 +22,7 @@
 
 #pragma debuggerWindows("joystickGame");
 #define SONAR_DEBUG
-#include "auto_includes.h"
+#include "../teleop_includes.h"
 
 task main()
 {
@@ -34,12 +34,18 @@ task main()
 	StartTask(Lift);
 	waitLiftReady();
 
+	/*
+	while(true) {
+		readSonarMax();
+	}
+	*/
+
 	// Goal to side
 	if(readSonarMax(20) > 130) {
 
 		// Turn left, drive past the beacon, turn back
 		driveToGyro(28, TURN_LEFT);
-		driveToEncoder(AUTO_DRIVE_SPEED, 6900);
+		driveToEncoder(AUTO_DRIVE_SPEED, 6400);
 		driveToGyro(120, !TURN_LEFT);
 
 		// Turn to IR alignment
@@ -52,7 +58,7 @@ task main()
 
 		// Goal intermediate
 		int sonar = readSonarMax(20);
-		if (!sonar || sonar > 60) {
+		if (sonar == 0 || (sonar <= 90 && sonar >= 70)) {
 			driveToGyro(80, TURN_LEFT);
 			driveToEncoder(AUTO_DRIVE_SPEED, 2600);
 			driveToGyro(115, !TURN_LEFT);
