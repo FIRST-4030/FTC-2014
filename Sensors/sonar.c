@@ -27,8 +27,8 @@ int readSonar() {
 		active = sonarHighDevice;
 		inactive = sonarLowDevice;
 	}
-	USsetOff(inactive);
-	USsetSingleMode(active);
+	USsetOff((tSensors)SPORT(inactive));
+	USsetSingleMode((tSensors)SPORT(active));
 	wait1Msec(SONAR_DELAY);
 	int sonar = USreadDist(active);
 	if (sonar < SONAR_MIN || sonar > SONAR_MAX) {
