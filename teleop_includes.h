@@ -28,7 +28,12 @@ const tMUXSensor lightLeft = msensor_S2_4;
 //Include for the auto functions
 #include "Autonomous/auto_functions.c"
 
+//Each file that includes this must specify their period in which they run
+//Before intializing the robot
+LiftPeriod programPeriod;
+
 //Include for robot initialization
 #include "init_robot.c";
+
 
 #endif

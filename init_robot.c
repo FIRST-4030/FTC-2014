@@ -9,7 +9,7 @@ void initializeRobot() {
 	initMotors(leftFrontMotor, leftRearMotor, rightFrontMotor, rightRearMotor);
 	#endif
 	#ifdef FTC_LIFT
-	initLift(liftMotor, liftTS);
+	initLift(liftMotor, liftTS, programPeriod);
 	#endif
 
 	// Stop the spinner

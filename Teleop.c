@@ -30,6 +30,7 @@ void stopAndDump(LiftState cmd) {
 
 task main()
 {
+	programPeriod = TELEOP;
   initializeRobot();
   waitForStart();
 

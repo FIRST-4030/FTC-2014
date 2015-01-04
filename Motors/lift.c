@@ -32,6 +32,12 @@ typedef enum {
 } LiftState;
 LiftState liftCmd = RESET;
 #define NUM_LIFT_STATES (7)
+typedef enum {
+				AUTONOMOUS,
+				TELEOP
+} LiftPeriod;
+LiftPeriod liftPeriod;
+#define NUM_LIFT_PERIODS (2)
 
 void driveLift(int speed) {
 	motor[liftDrive] = speed;
@@ -60,9 +66,10 @@ void stopLift() {
 	driveLift(0);
 }
 
-void initLift(tMotor lift, tSensors touch) {
+void initLift(tMotor lift, tSensors touch, LiftPeriod period) {
 	liftDrive = lift;
 	liftTouch = touch;
+	liftPeriod = period;
 	stopLift();
 }
 
@@ -280,13 +287,17 @@ task Lift() {
 		if(isLiftAboveRobot()) {
 			driveStopped = true;
 			#ifdef FTC_DRIVETASK
-				StopTask(DriveMec);
-				stopDriveMotors();
+				if(liftPeriod == TELEOP) {
+					StopTask(DriveMec);
+					stopDriveMotors();
+				}
 			#endif
 		} else if (driveStopped) {
 			driveStopped = false;
 			#ifdef FTC_DRIVETASK
-				StartTask(DriveMec);
+				if(liftPeriod == TELEOP) {
+					StartTask(DriveMec);
+				}
 			#endif
 		}
 
