@@ -19,17 +19,6 @@ void initIR(tMUXSensor irSensor) {
 	IR = irSensor;
 }
 
-//Driving Method for Wheels, Called Directly in Tele-Op
-//The params are naturally the joysticks, thus named after their axis
-void DriveMecWheels(int Y1, int X1, int X2) {
-	Y1 = -Y1;
-	X1 = -X1;
-	motor[leftRearMotor] = Y1 - X2 - X1;
-	motor[leftFrontMotor] =  Y1 - X2 + X1;
-	motor[rightRearMotor] = Y1 + X2 + X1;
-	motor[rightFrontMotor] =  Y1 + X2 - X1;
-}
-
 // Motor Driving Methods for Non-Wheel Motors
 void DriveSpinnerMotor(int power) {
 	motor[spinnerMotor] = power;
@@ -173,7 +162,7 @@ bool driveToGyro(int degrees, bool left = true, int time = 5000) {
 // Drive until the sonar returns *something*
 bool driveToSonarRange(int speed, int overdrive = 500, int timeout = 5000, int interval = 100) {
 	ClearTimer(T3);
-	while (time1[T3] < timeout && !readSonarMax()) {
+	while (time1[T3] < timeout && !readSonarMax(2)) {
 		driveToEncoder(speed, interval);
 	}
 	driveToEncoder(speed, overdrive);

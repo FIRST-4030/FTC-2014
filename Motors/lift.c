@@ -11,7 +11,7 @@
 #define LIFT_HEIGHT_LOW (6200)
 #define LIFT_HEIGHT_MED (10000)
 #define LIFT_HEIGHT_HIGH (13600)
-#define LIFT_HEIGHT_CENTER (14000)
+#define LIFT_HEIGHT_CENTER (13900)
 
 // Define to use the Tetrix PID system
 // Clear to use our local PID system
@@ -286,12 +286,10 @@ task Lift() {
 		//Start/Stop DriveMec based on if it's safe with the lift
 		if(isLiftAboveRobot()) {
 			driveStopped = true;
-			#ifdef FTC_DRIVETASK
-				if(liftPeriod == TELEOP) {
+			if(liftPeriod == TELEOP) {
 					StopTask(DriveMec);
 					stopDriveMotors();
-				}
-			#endif
+			}
 		} else if (driveStopped) {
 			driveStopped = false;
 			#ifdef FTC_DRIVETASK

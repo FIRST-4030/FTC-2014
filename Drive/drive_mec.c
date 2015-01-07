@@ -8,6 +8,17 @@
 // Travelling in a Direction: joystick.joy1 (y1 and x1)
 // Spinning in a Circle: joystick.joy1_x2
 
+//Driving Method for Wheels, Called Directly in Tele-Op
+//The params are naturally the joysticks, thus named after their axis
+void DriveMecWheels(int Y1, int X1, int X2) {
+	Y1 = -Y1;
+	X1 = -X1;
+	motor[leftRearMotor] = Y1 - X2 - X1;
+	motor[leftFrontMotor] =  Y1 - X2 + X1;
+	motor[rightRearMotor] = Y1 + X2 + X1;
+	motor[rightFrontMotor] =  Y1 + X2 - X1;
+}
+
 task DriveMec()
 {
 	//Create "deadzone" variables. Adjust threshold value to increase/decrease deadzone

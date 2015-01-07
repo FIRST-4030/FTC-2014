@@ -41,7 +41,7 @@ task main()
 	*/
 
 	// Goal to side
-	if(readSonarMax(20) > 130) {
+	if(readSonarMax(15) > 130) {
 
 		// Turn left, drive past the beacon, turn back
 		driveToGyro(28, TURN_LEFT);
@@ -57,7 +57,7 @@ task main()
 		driveToEncoder(AUTO_DRIVE_SPEED, 2300);
 
 		// Goal intermediate
-		int sonar = readSonarMax(20);
+		int sonar = readSonarMax(15);
 		if (sonar == 0 || (sonar <= 90 && sonar >= 70)) {
 			driveToGyro(80, TURN_LEFT);
 			driveToEncoder(AUTO_DRIVE_SPEED, 2600);

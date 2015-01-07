@@ -12,7 +12,7 @@
 #define IR_RIGHT_SIDE (9)
 #define AUTO_DRIVE_SPEED_LOW (AUTO_DRIVE_SPEED * 0.2)
 #define AUTO_DRIVE_SPEED_CRAWL (AUTO_DRIVE_SPEED_LOW * 0.5)
-#define SONAR_FAR (38)
+#define SONAR_FAR (50)
 #define SONAR_NEAR (SONAR_FAR - 3)
 
 bool AutoScore() {
@@ -20,27 +20,33 @@ bool AutoScore() {
 	setWaitLiftCmd(LOW);
 
 	// Drive into sonar range
-	if (!driveToSonarRange(AUTO_DRIVE_SPEED_LOW, 500)) {
+	if (!driveToSonarRange(AUTO_DRIVE_SPEED_CRAWL, 500)) {
 		servoHookCapture();
 		wait1Msec(1000);
 		servoHookRelease();
 		return false;
 	}
 
-	// Approach the goal until we hit the SONAR_FAR target
-	if (!driveToSonar(AUTO_DRIVE_SPEED_LOW, SONAR_FAR, false)) {
-		servoHookCapture();
-		servoHighDrop();
-		wait1Msec(1000);
-		servoHookRelease();
-		servoHighHold();
-		return false;
+	//Check to see if second approach is actually necessary
+	if(readSonarMax(2) > SONAR_FAR) {
+
+		// Approach the goal until we hit the SONAR_FAR target
+		if (!driveToSonar(AUTO_DRIVE_SPEED_CRAWL, SONAR_FAR, false)) {
+			servoHookCapture();
+			servoHighDrop();
+			wait1Msec(1000);
+			servoHookRelease();
+			servoHighHold();
+			return false;
+		}
+
 	}
+
 	driveToGyro(7, !TURN_LEFT);
 
 	// Start the lift up and sungle in tight
 	setLiftCmd(CENTER);
-	driveToSonar(AUTO_DRIVE_SPEED_CRAWL, SONAR_NEAR, false, 1000);
+	//driveToSonar(AUTO_DRIVE_SPEED_CRAWL, SONAR_NEAR, false, 1000);
 
 	// Wait for the lift and dump
 	waitLiftAtTarget();
@@ -62,10 +68,10 @@ bool AutoScore() {
 void AutoKickstand() {
 	// Turn and drive to clear center goal
 	driveToGyro(65, TURN_LEFT);
-	driveToEncoder(-AUTO_DRIVE_SPEED, 1500);
+	driveToEncoder(-AUTO_DRIVE_SPEED, 1000);
 
 	// Turn to face back to kickstand
-	driveToGyro(95, TURN_LEFT);
+	driveToGyro(100, TURN_LEFT);
 
 	// Hit kickstand
 	driveToEncoder(-AUTO_DRIVE_SPEED, 3500);

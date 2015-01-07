@@ -5,7 +5,6 @@
 #define SONAR_MIN (10)
 #define SONAR_MAX (200)
 
-#include "../Motors/lift.c"
 #include "../drivers/lego-ultrasound.h"
 
 tMUXSensor sonarLowDevice;
