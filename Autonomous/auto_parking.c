@@ -34,14 +34,8 @@ task main()
 	StartTask(Lift);
 	waitLiftReady();
 
-	/*
-	while(true) {
-		readSonarMax();
-	}
-	*/
-
 	// Goal to side
-	if(readSonarMax(15) > 130) {
+	if(readSonarMax(10) > 130) {
 
 		// Turn left, drive past the beacon, turn back
 		driveToGyro(28, TURN_LEFT);
@@ -57,7 +51,7 @@ task main()
 		driveToEncoder(AUTO_DRIVE_SPEED, 2300);
 
 		// Goal intermediate
-		int sonar = readSonarMax(15);
+		int sonar = readSonarMax(10);
 		if (sonar == 0 || (sonar <= 90 && sonar >= 70)) {
 			driveToGyro(80, TURN_LEFT);
 			driveToEncoder(AUTO_DRIVE_SPEED, 2600);

@@ -12,7 +12,7 @@
 #define IR_RIGHT_SIDE (9)
 #define AUTO_DRIVE_SPEED_LOW (AUTO_DRIVE_SPEED * 0.2)
 #define AUTO_DRIVE_SPEED_CRAWL (AUTO_DRIVE_SPEED_LOW * 0.5)
-#define SONAR_FAR (50)
+#define SONAR_FAR (35)
 #define SONAR_NEAR (SONAR_FAR - 3)
 
 bool AutoScore() {
@@ -46,7 +46,6 @@ bool AutoScore() {
 
 	// Start the lift up and sungle in tight
 	setLiftCmd(CENTER);
-	//driveToSonar(AUTO_DRIVE_SPEED_CRAWL, SONAR_NEAR, false, 1000);
 
 	// Wait for the lift and dump
 	waitLiftAtTarget();
@@ -68,7 +67,7 @@ bool AutoScore() {
 void AutoKickstand() {
 	// Turn and drive to clear center goal
 	driveToGyro(65, TURN_LEFT);
-	driveToEncoder(-AUTO_DRIVE_SPEED, 1000);
+	driveToEncoder(-AUTO_DRIVE_SPEED, 1050);
 
 	// Turn to face back to kickstand
 	driveToGyro(100, TURN_LEFT);
