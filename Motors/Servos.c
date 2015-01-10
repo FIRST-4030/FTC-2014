@@ -57,7 +57,7 @@ void servosInit(TServoIndex hook, tMUXSensor light, TServoIndex high) {
 	servoHook = hook;
 	servoChangeRate[servoHook] = HOOK_RATE;
 	servoLight = light;
-	servoHookRelease();
+	servoHookCapture();
 
 	servoHigh = high;
 	servoChangeRate[servoHigh] = HIGH_RATE;
