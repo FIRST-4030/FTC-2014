@@ -6,11 +6,14 @@
 #define LIFT_FULL_ERR (100)
 #define LIFT_HEIGHT_ROBOT (5200)
 
+//To calibrate the lift height high
+int calibration = 0;
+
 #define LIFT_HEIGHT_COLLECT (10)
 #define LIFT_HEIGHT_DRIVE (1000)
 #define LIFT_HEIGHT_LOW (6000)
 #define LIFT_HEIGHT_MED (9750)
-#define LIFT_HEIGHT_HIGH (13400)
+#define LIFT_HEIGHT_HIGH (13400 + calibration)
 #define LIFT_HEIGHT_CENTER (13900)
 
 // Define to use the Tetrix PID system
@@ -71,6 +74,14 @@ void initLift(tMotor lift, tSensors touch, LiftPeriod period) {
 	liftTouch = touch;
 	liftPeriod = period;
 	stopLift();
+}
+
+void incrLiftHeightHigh() {
+	calibration += 50;
+}
+
+void decrLiftHeightHigh() {
+	calibration -= 50;
 }
 
 bool readLiftTouch() {
@@ -166,8 +177,14 @@ task Lift() {
 	// Track when we disable teleop drive
 	bool driveStopped = false;
 
+	//Flags for increasing and decreasing height
+  bool incrLHeight = false, decrLHeight = false;
+
 	// Run forever
 	while (true) {
+
+		//Get the Latest joystick values
+		getJoystickSettings(joystick);
 
 		#ifdef LIFT_DEBUG
 			nxtDisplayBigTextLine(1, "%d %d", (int)liftCmd, readLiftEncoder());
@@ -194,6 +211,23 @@ task Lift() {
 			liftCmd = COLLECT;
 			liftReady = true;
 			continue;
+		}
+
+		//Determine if lift height needs to be recalibrated by driver input
+		if(joystick.joy2_TopHat == 0)
+			incrLHeight = true;
+
+		if(incrLHeight && joystick.joy2_TopHat == -1) {
+			incrLHeight = false;
+			incrLiftHeightHigh();
+		}
+
+		if(joystick.joy2_TopHat == 4)
+			decrLHeight = true;
+
+		if(decrLHeight && joystick.joy2_TopHat == -1) {
+			decrLHeight = false;
+			decrLiftHeightHigh();
 		}
 
 		// Determine the height we'd like the lift to be at
