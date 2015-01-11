@@ -10,7 +10,7 @@
 #define LIFT_HEIGHT_DRIVE (1000)
 #define LIFT_HEIGHT_LOW (6000)
 #define LIFT_HEIGHT_MED (9750)
-#define LIFT_HEIGHT_HIGH (13250)
+#define LIFT_HEIGHT_HIGH (13400)
 #define LIFT_HEIGHT_CENTER (13900)
 
 // Define to use the Tetrix PID system

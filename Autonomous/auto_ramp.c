@@ -62,7 +62,10 @@ task main()
 
   // Turn left and back into large goal
   driveToGyro(120, TURN_RIGHT);
-  driveToEncoder(AUTO_DRIVE_SPEED, 1500);
-  driveToGyro(225, TURN_LEFT);
+  driveToEncoder(AUTO_DRIVE_SPEED, 1550);
+  driveToGyro(220, TURN_LEFT);
   driveToEncoder(-AUTO_DRIVE_SPEED, 9000);
+
+  //Set back to collect
+  setLiftCmd(COLLECT);
 }

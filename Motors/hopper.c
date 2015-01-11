@@ -6,7 +6,7 @@
 #define HOPPER_RATE (0)
 
 #define HOPPER_POS_DOWN (50)
-#define HOPPER_POS_MID (95)
+#define HOPPER_POS_MID (110)
 #define HOPPER_POS_UP (220)
 
 bool dumpSignal = false;
@@ -46,8 +46,8 @@ void hopperInit(TServoIndex hopper) {
 	servoChangeRate[servoHopper] = HOPPER_RATE;
 	SetHopperServo(UP);
 
-	DUMP_DELAYS[HIGH] = 1.5;
-	DUMP_DELAYS[MED] = 2.5;
+	DUMP_DELAYS[HIGH] = 1.75;
+	DUMP_DELAYS[MED] = 2.75;
 	DUMP_DELAYS[LOW] = 3.5;
 }
 
