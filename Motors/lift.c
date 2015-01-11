@@ -8,6 +8,7 @@
 
 //To calibrate the lift height high
 int calibration = 0;
+#define LIFT_HEIGHT_CHANGE (100)
 
 #define LIFT_HEIGHT_COLLECT (10)
 #define LIFT_HEIGHT_DRIVE (1000)
@@ -77,11 +78,11 @@ void initLift(tMotor lift, tSensors touch, LiftPeriod period) {
 }
 
 void incrLiftHeightHigh() {
-	calibration += 50;
+	calibration += LIFT_HEIGHT_CHANGE;
 }
 
 void decrLiftHeightHigh() {
-	calibration -= 50;
+	calibration -= LIFT_HEIGHT_CHANGE;
 }
 
 bool readLiftTouch() {
