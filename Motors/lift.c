@@ -23,6 +23,7 @@ int calibration = 0;
 
 bool liftReady = false;
 bool liftAtTarget = false;
+int lastLiftErr = 0;
 tMotor liftDrive;
 tSensors liftTouch;
 typedef enum {
@@ -78,11 +79,11 @@ void initLift(tMotor lift, tSensors touch, LiftPeriod period) {
 }
 
 void incrLiftHeightHigh() {
-	calibration += LIFT_HEIGHT_CHANGE;
+	calibration += LIFT_HEIGHT_CHANGE + lastLiftErr;
 }
 
 void decrLiftHeightHigh() {
-	calibration -= LIFT_HEIGHT_CHANGE;
+	calibration -= LIFT_HEIGHT_CHANGE - lastLiftErr;
 }
 
 bool readLiftTouch() {
@@ -314,6 +315,7 @@ task Lift() {
 		// Note when we're on-target for outside observers
 		if (liftErrAbs < LIFT_DEAD_ZONE) {
 			liftAtTarget = true;
+			lastLiftErr = liftErr;
 		} else {
 			liftAtTarget = false;
 		}
