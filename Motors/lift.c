@@ -10,6 +10,10 @@
 int calibration = 0;
 #define LIFT_HEIGHT_CHANGE (150)
 
+#define LIFT_RESET_TIMEOUT (4)
+#define LIFT_RESET_OFFSET (-50)
+#define LIFT_RESET_SPEED (0.2)
+
 #define LIFT_HEIGHT_COLLECT (10)
 #define LIFT_HEIGHT_DRIVE (1000)
 #define LIFT_HEIGHT_LOW (6000)
@@ -93,8 +97,8 @@ bool readLiftTouch() {
 	return false;
 }
 
-void resetLiftEncoder() {
-	nMotorEncoder[liftDrive] = 0;
+void resetLiftEncoder(int offset = 0) {
+	nMotorEncoder[liftDrive] = offset;
 }
 
 int readLiftEncoder() {
@@ -193,25 +197,46 @@ task Lift() {
 		#endif
 
 		// When reset is commanded ignore everything else until we are ready
-		if (liftCmd == RESET) {
-			int resetTime = 4;
+		if (liftCmd == RESET && liftSpeed != 0) {
+
+			// Try to get the lift down. Give if it doesn't happen promptly.
 			ClearTimer(T1);
 			while (!readLiftTouch()) {
-				nxtDisplayBigTextLine(1, "Reset %d", readLiftTouch());
+				#ifdef LIFT_DEBUG
+					nxtDisplayBigTextLine(1, "Reset %d", readLiftTouch());
+				#endif
 				driveLift(-liftSpeed);
-				//Fail-safe, originally wait four seconds to see if lift is wound wrong way
-				if(time1[T1] > resetTime * 1000) {
-					//Invert lift direction and wait eight seconds to see if the lift is properly reset
-					liftSpeed = -liftSpeed;
-					resetTime = 8;
-					ClearTimer(T1);
+				if(time1[T1] > 1000 * LIFT_RESET_TIMEOUT) {
+					liftSpeed = 0;
 				}
 			}
-			nxtDisplayBigTextLine(1, "Ready");
 			stopLift();
 			resetLiftEncoder();
-			liftCmd = COLLECT;
-			liftReady = true;
+
+			// If the lift is down, nudge it up to find the switch release point
+			while (readLiftTouch()) {
+				driveLift(liftSpeed * LIFT_RESET_SPEED);
+			}
+			stopLift();
+			resetLiftEncoder(-LIFT_RESET_OFFSET);
+
+			// Announce our completion status (or keep the RESET status if we failed)
+			if (liftSpeed != 0) {
+				liftCmd = COLLECT;
+				liftReady = true;
+				#ifdef LIFT_DEBUG
+					nxtDisplayBigTextLine(1, "Ready");
+				#endif
+			} else {
+				liftCmd = RESET;
+				liftReady = false;
+				#ifdef LIFT_DEBUG
+					nxtDisplayBigTextLine(1, "Reset Failed");
+					wait1Msec(1000 * LIFT_RESET_TIMEOUT);
+				#endif
+			}
+
+			// Jump back to the top of the loop once the lift is ready
 			continue;
 		}
 
