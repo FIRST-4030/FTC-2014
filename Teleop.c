@@ -30,6 +30,7 @@ void stopAndDump(LiftState cmd) {
 
 task main()
 {
+  bool incrLHeight = false, decrLHeight = false;
 	programPeriod = TELEOP;
   initializeRobot();
   waitForStart();
@@ -54,6 +55,7 @@ task main()
 			servoHookRelease();
 		}
 
+		// Lift position control
 		if (joy2Btn(4)) {
 			stopAndDump(HIGH);
 		} else if(joy2Btn(7)) {
@@ -64,6 +66,19 @@ task main()
 			stopAndDump(LOW);
 		} else if(joy2Btn(1) || joy2Btn(3)) {
 			stopAndDump(MED);
+		}
+
+		// Lift height tuning
+		if(joystick.joy2_TopHat == 0) {
+			incrLHeight = true;
+		} else if(incrLHeight && joystick.joy2_TopHat == -1) {
+			incrLHeight = false;
+			incrLiftHeightHigh();
+		} else if(joystick.joy2_TopHat == 4) {
+			decrLHeight = true;
+		} else if(decrLHeight && joystick.joy2_TopHat == -1) {
+			decrLHeight = false;
+			decrLiftHeightHigh();
 		}
 	}
 }
