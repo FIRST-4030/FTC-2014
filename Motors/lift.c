@@ -2,8 +2,8 @@
 #define FTC_LIFT
 
 #define LIFT_SPEED (100)
-#define LIFT_DEAD_ZONE (100)
-#define LIFT_FULL_ERR (100)
+#define LIFT_DEAD_ZONE (50)
+#define LIFT_FULL_ERR (LIFT_DEAD_ZONE * 2)
 #define LIFT_HEIGHT_ROBOT (5200)
 
 //To calibrate the lift height high
