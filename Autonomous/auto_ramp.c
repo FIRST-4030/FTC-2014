@@ -53,18 +53,18 @@ task main()
 
   // Run back toward the parking zone
   driveToGyro(30, !TURN_LEFT);
-  driveToEncoder(AUTO_DRIVE_SPEED, 9000);
+  driveToEncoder(AUTO_DRIVE_SPEED, 8850);
   driveToGyro(120, !TURN_LEFT);
 
   // Release goal
   servoHookRelease();
-  driveToEncoder(AUTO_DRIVE_SPEED, 500);
+  driveToEncoder(AUTO_DRIVE_SPEED, 1850);
 
   // Turn left and back into large goal
-  driveToGyro(120, TURN_RIGHT);
-  driveToEncoder(AUTO_DRIVE_SPEED, 1550);
-  driveToGyro(220, TURN_LEFT);
-  driveToEncoder(-AUTO_DRIVE_SPEED, 9000);
+  driveToGyro(40, TURN_LEFT);
+  driveToEncoder(-AUTO_DRIVE_SPEED, 3500);
+  driveToGyro(80, TURN_LEFT);
+  driveToEncoder(-AUTO_DRIVE_SPEED, 7000);
 
   //Set back to collect
   setLiftCmd(COLLECT);
