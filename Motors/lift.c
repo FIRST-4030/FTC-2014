@@ -15,11 +15,11 @@ int calibration = 0;
 #define LIFT_RESET_OFFSET (25)
 #define LIFT_RESET_SPEED (0.2)
 
-#define LIFT_HEIGHT_COLLECT (10)
-#define LIFT_HEIGHT_DRIVE (1000)
-#define LIFT_HEIGHT_LOW (6000)
-#define LIFT_HEIGHT_MED (9750)
-#define LIFT_HEIGHT_HIGH (13200)
+#define LIFT_HEIGHT_COLLECT (1)
+#define LIFT_HEIGHT_DRIVE (1250)
+#define LIFT_HEIGHT_LOW (5900)
+#define LIFT_HEIGHT_MED (9600)
+#define LIFT_HEIGHT_HIGH (13000)
 #define LIFT_HEIGHT_CENTER (LIFT_HEIGHT_HIGH + 100)
 
 // Define to use the Tetrix PID system

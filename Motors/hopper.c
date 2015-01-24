@@ -46,7 +46,7 @@ void hopperInit(TServoIndex hopper) {
 	servoChangeRate[servoHopper] = HOPPER_RATE;
 	SetHopperServo(UP);
 
-	DUMP_DELAYS[HIGH] = 1.75;
+	DUMP_DELAYS[HIGH] = 2.25;
 	DUMP_DELAYS[MED] = 2.75;
 	DUMP_DELAYS[LOW] = 3.5;
 }
