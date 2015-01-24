@@ -4,7 +4,7 @@
 
 #define LIFT_SPEED (100)
 #define LIFT_DEAD_ZONE (50)
-#define LIFT_FULL_ERR (LIFT_DEAD_ZONE * 4)
+#define LIFT_FULL_ERR (LIFT_DEAD_ZONE * 2)
 #define LIFT_HEIGHT_ROBOT (5200)
 
 //To calibrate the lift height high
@@ -19,8 +19,8 @@ int calibration = 0;
 #define LIFT_HEIGHT_DRIVE (1000)
 #define LIFT_HEIGHT_LOW (6000)
 #define LIFT_HEIGHT_MED (9750)
-#define LIFT_HEIGHT_HIGH (13400 + calibration)
-#define LIFT_HEIGHT_CENTER (13900)
+#define LIFT_HEIGHT_HIGH (13200)
+#define LIFT_HEIGHT_CENTER (LIFT_HEIGHT_HIGH + 100)
 
 // Define to use the Tetrix PID system
 // Clear to use our local PID system
@@ -99,10 +99,8 @@ bool readLiftTouch() {
 }
 
 void resetLiftEncoder(int offset = 0) {
-	if (offset != 0) {
-			nxtDisplayBigTextLine(1, "Zero: %d", readLiftEncoder());
-			wait1Msec(5 * 1000);
-	}
+	stopLift();
+	wait1Msec(100);
 	nMotorEncoder[liftDrive] = offset;
 }
 
@@ -209,19 +207,13 @@ task Lift() {
 					liftSpeed = 0;
 				}
 			}
-			stopLift();
 			resetLiftEncoder();
 
 			// If the lift is down, nudge it up to find the switch release point
-			nxtDisplayBigTextLine(1, "Pre: %d", readLiftEncoder());
-			wait1Msec(5 * 1000);
 			while (readLiftTouch()) {
 				driveLift(liftSpeed * LIFT_RESET_SPEED);
 			}
-			stopLift();
-			resetLiftEncoder(-LIFT_RESET_OFFSET);
-			nxtDisplayBigTextLine(1, "Post: %d", readLiftEncoder());
-			wait1Msec(5 * 1000);
+			resetLiftEncoder(LIFT_RESET_OFFSET);
 
 			// Announce our completion status (or keep the RESET status if we failed)
 			if (liftSpeed != 0) {
@@ -300,26 +292,26 @@ task Lift() {
 		#else
 
 			// Calculate a lift speed based on the magnitude of the lift height error
-			int liftSpeed = 0;
+			int driveSpeed = 0;
 			if (liftErrAbs < LIFT_DEAD_ZONE) {
 				// No motion when we're in the dead zone
-				liftSpeed = 0;
+				driveSpeed = 0;
 			} else if (liftErrAbs >= LIFT_FULL_ERR) {
 				// Full speed if we're more than LIFT_FULL_ERR away from the target
-				liftSpeed = 100;
+				driveSpeed = liftSpeed;
 			} else {
 				// More slowly as we approach the target
 				// This is the "P" of PID. We may also need an "I".
-				liftSpeed = ((LIFT_FULL_ERR - liftErrAbs) * liftSpeed) / LIFT_FULL_ERR;
+				driveSpeed = ((LIFT_FULL_ERR - liftErrAbs) * driveSpeed) / LIFT_FULL_ERR;
 			}
 
 			// Invert the lift speed if the lift should move down
 			if (liftErr < 0) {
-				liftSpeed *= -1;
+				driveSpeed *= -1;
 			}
 
 			// Drive the lift and loop
-			driveLift(liftSpeed);
+			driveLift(driveSpeed);
 
 		#endif
 
