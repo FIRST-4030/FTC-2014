@@ -34,12 +34,14 @@ task main()
 	StartTask(Lift);
 	waitLiftReady();
 
+	driveToEncoder(AUTO_DRIVE_SPEED, 150);
+
 	// Goal to side
 	if(readSonarMax(10) > 130) {
 
 		// Turn left, drive past the beacon, turn back
-		driveToGyro(28, TURN_LEFT);
-		driveToEncoder(AUTO_DRIVE_SPEED, 6400);
+		driveToGyro(30, TURN_LEFT);
+		driveToEncoder(AUTO_DRIVE_SPEED, 6250);
 		driveToGyro(120, !TURN_LEFT);
 
 		// Turn to IR alignment
@@ -54,12 +56,11 @@ task main()
 		int sonar = readSonarMax(10);
 		if (sonar == 0 || (sonar <= 90 && sonar >= 70)) {
 			driveToGyro(80, TURN_LEFT);
-			driveToEncoder(AUTO_DRIVE_SPEED, 2600);
+			driveToEncoder(AUTO_DRIVE_SPEED, 2500);
 			driveToGyro(115, !TURN_LEFT);
 
 			// Turn to IR alignment
 			valid = driveToIR(-AUTO_DRIVE_SPEED, true, false, IR_MID);
-			driveToGyro(20, TURN_LEFT);
 
 		// Goal ahead
 		} else {

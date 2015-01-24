@@ -68,6 +68,7 @@ task main()
 			stopAndDump(MED);
 		}
 
+		/* Uncomment if this becomes necessary to use
 		// Lift height tuning
 		if(joystick.joy2_TopHat == 0) {
 			incrLHeight = true;
@@ -80,5 +81,6 @@ task main()
 			decrLHeight = false;
 			decrLiftHeightHigh();
 		}
+		*/
 	}
 }
