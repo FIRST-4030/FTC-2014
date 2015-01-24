@@ -255,7 +255,7 @@ task Lift() {
 				break;
 
 			case HIGH:
-				liftCmdHeight = LIFT_HEIGHT_HIGH;
+				liftCmdHeight = LIFT_HEIGHT_HIGH + calibration;
 				break;
 
 			case CENTER:
