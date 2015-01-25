@@ -34,10 +34,11 @@ task main()
 	StartTask(Lift);
 	waitLiftReady();
 
-	driveToEncoder(AUTO_DRIVE_SPEED, 150);
-
 	// Goal to side
 	if(readSonarMax(10) > 130) {
+
+		//Drive out to not hit wall
+		driveToEncoder(AUTO_DRIVE_SPEED, 150);
 
 		// Turn left, drive past the beacon, turn back
 		driveToGyro(30, TURN_LEFT);
