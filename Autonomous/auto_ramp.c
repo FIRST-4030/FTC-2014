@@ -51,6 +51,15 @@ task main()
 		abortTimeslice();
 	}
 
+	/*
+
+	driveToEncoder(AUTO_DRIVE_SPEED, 2250);
+	driveToGyro(110, TURN_LEFT);
+	driveToEncoder(-AUTO_DRIVE_SPEED, 2225);
+	driveToGyro(20, TURN_LEFT);
+	driveToEncoder(-AUTO_DRIVE_SPEED, 2000);
+	*/
+
   // Run back toward the parking zone
   driveToGyro(30, !TURN_LEFT);
   driveToEncoder(AUTO_DRIVE_SPEED, 8850);

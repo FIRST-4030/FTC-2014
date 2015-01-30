@@ -35,7 +35,7 @@ task main()
 	waitLiftReady();
 
 	// Goal to side
-	if(readSonarMax(10) > 130) {
+	if(readSonarMax(5) > 130) {
 
 		//Drive out to not hit wall
 		driveToEncoder(AUTO_DRIVE_SPEED, 150);
