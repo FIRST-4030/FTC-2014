@@ -1,11 +1,11 @@
 #ifndef FTC_SERVOS
 #define FTC_SERVOS
 
-#define HOOK_MIN (40)
+#define HOOK_MIN (43)
 #define HOOK_MAX (160)
 #define HOOK_RATE (0)
-#define HIGH_MIN (70)
-#define HIGH_MAX (175)
+#define HIGH_MIN (160)
+#define HIGH_MAX (233)
 #define HIGH_RATE (0)
 
 TServoIndex servoHook;
